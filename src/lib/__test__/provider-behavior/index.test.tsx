@@ -1,18 +1,18 @@
-import { renderWithBlueFormProvider } from "@/__test__/_utils/render-form"
-import BlueForm from "@/components/form/BlueForm"
-import { screen } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
-import { DummyField } from "../_utils/field";
+import { renderWithBlueFormProvider } from '@/__test__/_utils/render-form';
+import BlueForm from '@/components/form/BlueForm';
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { DummyField } from '../_utils/field';
 
-describe("BlueForm config override – fieldMapping", () => {
-  it("uses fieldMapping from form props over provider", () => {
-    const ProviderText = () => <DummyField name="provider-text" />
-    const FormText = () => <DummyField name="form-text" />
+describe('BlueForm config override – fieldMapping', () => {
+  it('uses fieldMapping from form props over provider', () => {
+    const ProviderText = () => <DummyField name="provider-text" />;
+    const FormText = () => <DummyField name="form-text" />;
 
     renderWithBlueFormProvider(
       <BlueForm
         config={{
-          name: { type: "text" },
+          name: { type: 'text' },
         }}
         fieldMapping={{
           text: FormText,
@@ -23,9 +23,13 @@ describe("BlueForm config override – fieldMapping", () => {
           text: ProviderText,
         },
       }
-    )
+    );
 
-    expect(screen.getByTestId("form-text")).toBeDefined()
-    expect(screen.queryByTestId("provider-text")).toBeNull()
-  })
-})
+    expect(screen.getByTestId('form-text')).toBeDefined();
+    expect(screen.queryByTestId('provider-text')).toBeFalsy();
+  });
+
+  it('throws error when renderRoot is not provided', () => {
+    expect(() => render(<BlueForm config={{}} />)).toThrowError(/renderRoot/i);
+  });
+});

@@ -41,6 +41,7 @@ function FormEngine<
   readOnlyEmptyFallback,
   namespace,
 }: FormEngineProps<TModel, TComponentMap>) {
+  console.log('🚀 ~ FormEngine ~ fieldMapping:', fieldMapping)
   const { t, validationResolver = {}, enabled: isI18nEnabled } = i18nConfig
 
   const { watch } = useFormContext()
@@ -123,7 +124,7 @@ function FormEngine<
             const ArrayField = fieldMapping?.["array"]
             if (!ArrayField) {
               throw new Error(
-                `No component of array field found for **${name}**`
+                `No component of array field found for **${resolvedProps.name}**`
               )
             }
             component = (
