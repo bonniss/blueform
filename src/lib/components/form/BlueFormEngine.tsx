@@ -11,26 +11,24 @@ import type {
   NestedFieldProps,
 } from '@/types';
 
+import { I18nResolvedConfig } from '@/types/form';
 import HiddenField from './field/HiddenField';
 import InlineField from './field/InlineField';
 import { FieldArrayProvider } from './provider/FieldArrayProvider';
 import { FieldProvider } from './provider/FieldProvider';
 
-interface FormEngineProps<
+interface BlueFormEngineProps<
   TModel extends FieldValues,
   TComponentMap extends ComponentMap
 > extends Pick<
     BlueFormProps<TModel, TComponentMap>,
-    | 'config'
-    | 'readOnly'
-    | 'readOnlyEmptyFallback'
-    | 'fieldMapping'
-    | 'i18nConfig'
+    'config' | 'readOnly' | 'readOnlyEmptyFallback' | 'fieldMapping'
   > {
   namespace?: string;
+  i18nConfig: I18nResolvedConfig;
 }
 
-function FormEngine<
+function BlueFormEngine<
   TModel extends FieldValues,
   TComponentMap extends Record<string, any>
 >({
@@ -40,8 +38,8 @@ function FormEngine<
   readOnly: isFormReadOnly,
   readOnlyEmptyFallback,
   namespace,
-}: FormEngineProps<TModel, TComponentMap>) {
-  const { t, validationResolver = {}, enabled: isI18nEnabled } = i18nConfig;
+}: BlueFormEngineProps<TModel, TComponentMap>) {
+  const { t, validationResolver = {} } = i18nConfig;
 
   const { watch } = useFormContext();
   const values = watch() as Partial<TModel>;
@@ -77,7 +75,6 @@ function FormEngine<
         const isRequired = Boolean(rules?.required);
 
         if (
-          isI18nEnabled &&
           !!Object.keys(rules).length &&
           !!Object.keys(validationResolver).length
         ) {
@@ -144,10 +141,12 @@ function FormEngine<
 
             if (contentConfig) {
               children = (
-                <FormEngine
+                <BlueFormEngine
                   config={contentConfig}
                   readOnly={isFormReadOnly}
                   readOnlyEmptyFallback={readOnlyEmptyFallback}
+                  i18nConfig={i18nConfig}
+                  fieldMapping={fieldMapping}
                   namespace={
                     (type as CoreFieldType) === 'ui' ? namespace : path
                   }
@@ -196,4 +195,4 @@ function FormEngine<
   return body;
 }
 
-export default FormEngine;
+export default BlueFormEngine;

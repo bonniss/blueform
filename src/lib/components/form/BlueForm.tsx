@@ -12,7 +12,7 @@ import {
 
 import { BlueFormRef } from '@/types/form';
 import type { BlueFormProps, ComponentMap } from '../../types';
-import FormEngine from './BlueFormEngine';
+import BlueFormEngine from './BlueFormEngine';
 import { useResolvedProps } from './hook/use-resolved-props';
 
 export function BlueFormInner<
@@ -85,7 +85,7 @@ export function BlueFormInner<
 
   const formBody = (
     <>
-      <FormEngine
+      <BlueFormEngine
         readOnly={isFormReadOnly}
         i18nConfig={i18nConfig}
         fieldMapping={fieldMapping}

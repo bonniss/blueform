@@ -1,15 +1,24 @@
-import { TranslatableText, TranslateFn } from '.'
+import { TranslatableText, TranslateFn } from '.';
 
 /**
- * A factory function to create a translator function, given a translation function.
+ * Normalizes a translation function so it can resolve TranslatableText.
  *
- * @param {TranslateFn} t - a translation function
- * @returns {TranslationResolver} - a translator function that can handle translation keys
- * @public
+ * The returned function is still called `t`, but now accepts both:
+ * - string (shorthand translation key)
+ * - TranslatableText object (message, params, fallback)
+ *
+ * The input `t` can come from any i18n solution or custom implementation.
  */
-export const translatorFactory = (t: TranslateFn) => (translateKey: TranslatableText | undefined) => {
-  if (!translateKey) return undefined
-  if (typeof translateKey === 'string') return t?.(translateKey)
-  if (translateKey.enableTranslation === false) return translateKey.message
-  return t?.(translateKey.message, translateKey.params) || translateKey.fallback || translateKey.message
-}
+export const normalizeTranslator =
+  (t: TranslateFn) =>
+  (input: TranslatableText | undefined): string | undefined => {
+    if (!input) return undefined;
+
+    // shorthand: string is treated as translation key
+    if (typeof input === 'string') {
+      return t?.(input);
+    }
+
+    const translated = t?.(input.message, input.params);
+    return translated ?? input.fallback ?? input.message;
+  };

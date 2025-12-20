@@ -1,3 +1,5 @@
+import { identity } from '@/components/helper/identity';
+import { normalizeTranslator } from '@/components/i18n/resolver';
 import { BlueFormProps, ComponentMap } from '@/types';
 import { FieldValues } from 'react-hook-form';
 import { useBlueFormProvider } from '../provider';
@@ -31,17 +33,21 @@ export const useResolvedProps = <
 
   if (!renderRoot) {
     throw new Error(
-      [
-        'No `renderRoot` was provided.',
-        'You must explicitly provide a renderRoot to define how the form is rendered.',
-      ].join('\n')
+      'No `renderRoot` was provided. A `renderRoot` is required to control how the form is rendered.'
     );
   }
+
+  const t =
+    i18nConfig?.enabled === false
+      ? identity
+      : normalizeTranslator(i18nConfig?.t ?? identity);
 
   return {
     fieldMapping,
     renderRoot,
-    i18nConfig,
+    i18nConfig: {
+      t,
+    },
     readOnlyEmptyFallback,
     ...props,
   };

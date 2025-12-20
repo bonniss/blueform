@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { DummyField } from '../_utils/field';
 
-describe('BlueForm base config override', () => {
+describe('BlueForm base config', () => {
   it('throws error when renderRoot is not provided', () => {
     expect(() => render(<BlueForm config={{}} />)).toThrowError(/renderRoot/i);
   });

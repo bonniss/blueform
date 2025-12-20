@@ -1,4 +1,5 @@
 import type {
+  TranslateFn,
   TranslationResolver,
   ValidationResolver,
 } from '@/components/i18n';
@@ -43,29 +44,45 @@ export type BlueFormRef<TModel = FieldValues> = UseFormReturn<
   TModel
 > | null;
 
+export type I18nConfig = {
+  /**
+   * Whether to enable i18n support for validation messages.
+   * If false or omitted, messages will fallback to raw/default text.
+   */
+  enabled?: boolean;
+
+  /**
+   * Translation function used to resolve localized message strings.
+   * If not provided, defaults to an identity function: (key) => key
+   */
+  t?: TranslateFn;
+
+  /**
+   * Custom resolver for formatting validation messages.
+   * Allows overriding or extending default error message generation logic.
+   */
+  validationResolver?: ValidationResolver;
+};
+
+export type I18nResolvedConfig = {
+  /**
+   * Translation function used to resolve localized message strings.
+   * If not provided, defaults to an identity function: (key) => key
+   */
+  t?: TranslationResolver;
+
+  /**
+   * Custom resolver for formatting validation messages.
+   * Allows overriding or extending default error message generation logic.
+   */
+  validationResolver?: ValidationResolver;
+};
+
 export interface BlueFormConfigBase {
   /**
    * Internationalization (i18n) and validation message configuration.
    */
-  i18nConfig?: {
-    /**
-     * Whether to enable i18n support for validation messages.
-     * If false or omitted, messages will fallback to raw/default text.
-     */
-    enabled?: boolean;
-
-    /**
-     * Translation function used to resolve localized message strings.
-     * If not provided, defaults to an identity function: (key) => key
-     */
-    t?: TranslationResolver;
-
-    /**
-     * Custom resolver for formatting validation messages.
-     * Allows overriding or extending default error message generation logic.
-     */
-    validationResolver?: ValidationResolver;
-  };
+  i18nConfig?: I18nConfig;
 
   /**
    * Mapping between field types and React components used to render them.
