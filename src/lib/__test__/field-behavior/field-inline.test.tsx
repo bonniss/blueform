@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { BlueForm, useField } from '@/components';
+import { BlueForm, SkipRender, useField } from '@/components';
 import { renderWithBlueFormProvider } from '../_utils/render-form';
 
 const TestRoot = ({ children, onSubmit }: any) => (
@@ -271,6 +271,32 @@ describe('BlueForm – inline & custom field', () => {
       expect(submitted).toEqual({
         name: 'Alice',
         age: 42,
+      });
+    });
+  });
+
+  it('skips UI for inline field but still submits defaultValue', async () => {
+    let submitted: any = null;
+
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        onSubmit={(data) => (submitted = data)}
+        config={{
+          name: {
+            type: 'inline',
+            defaultValue: 'Alice',
+            render: () => <SkipRender />,
+          },
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(submitted).toEqual({
+        name: 'Alice',
       });
     });
   });
