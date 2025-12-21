@@ -11,6 +11,43 @@ const TestRoot = ({ children, onSubmit }: any) => (
 );
 
 describe('BlueForm – group & ui', () => {
+  it('applies defaultValue inside group namespace', async () => {
+    let submitted: any = null;
+
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        onSubmit={(v) => (submitted = v)}
+        config={{
+          profile: {
+            type: 'group',
+            props: {
+              config: {
+                name: {
+                  type: 'hidden',
+                  defaultValue: 'Bob',
+                },
+              },
+            },
+          },
+        }}
+        fieldMapping={{
+          hidden: HiddenField,
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(submitted).toEqual({
+        profile: {
+          name: 'Bob',
+        },
+      });
+    });
+  });
+
   it('groups child fields under namespace', async () => {
     let submitted: any = null;
 
@@ -90,6 +127,41 @@ describe('BlueForm – group & ui', () => {
             city: 'HN',
           },
         },
+      });
+    });
+  });
+
+  it('applies defaultValue inside ui without namespace', async () => {
+    let submitted: any = null;
+
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        onSubmit={(v) => (submitted = v)}
+        config={{
+          layout: {
+            type: 'ui',
+            props: {
+              config: {
+                name: {
+                  type: 'hidden',
+                  defaultValue: 'Charlie',
+                },
+              },
+            },
+          },
+        }}
+        fieldMapping={{
+          hidden: HiddenField,
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(submitted).toEqual({
+        name: 'Charlie',
       });
     });
   });

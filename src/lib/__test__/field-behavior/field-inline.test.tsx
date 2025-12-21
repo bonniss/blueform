@@ -11,6 +11,30 @@ const TestRoot = ({ children, onSubmit }: any) => (
 );
 
 describe('BlueForm – inline & custom field', () => {
+  it('applies defaultValue for inline field', async () => {
+    let submitted: any = null;
+
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        onSubmit={(v) => (submitted = v)}
+        config={{
+          name: {
+            type: 'inline',
+            defaultValue: 'Alice',
+            render: () => null,
+          },
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(submitted).toEqual({ name: 'Alice' });
+    });
+  });
+
   it('inline field receives fieldProps and updates value', async () => {
     let snapshot: any = null;
 
@@ -117,6 +141,34 @@ describe('BlueForm – inline & custom field', () => {
       expect(submitted).toEqual({
         title: 'Custom',
       });
+    });
+  });
+
+  it('applies defaultValue for custom field', async () => {
+    let submitted: any = null;
+
+    const CustomField = () => null;
+
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        onSubmit={(v) => (submitted = v)}
+        config={{
+          age: {
+            type: 'custom',
+            defaultValue: 30,
+          },
+        }}
+        fieldMapping={{
+          custom: CustomField,
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(submitted).toEqual({ age: 30 });
     });
   });
 

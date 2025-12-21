@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { BlueForm } from '@/components';
+import { BlueForm, HiddenField } from '@/components';
 import { renderWithBlueFormProvider } from '../_utils/render-form';
 import { useArrayField } from '@/components/form/provider/FieldArrayProvider';
 
@@ -12,12 +12,68 @@ const TestRoot = ({ children, onSubmit }: any) => (
 );
 
 describe('BlueForm - field array', () => {
+it('ignores defaultValue defined on array field config', async () => {
+    let submitted: any = null;
+    const ArrayUI = () => {
+      const { controller } = useArrayField();
+      return (
+        <>
+          <button type="button" onClick={() => controller.append({})}>
+            Add
+          </button>
+          <button
+            type="button"
+            onClick={() => controller.update(0, { name: 'Alice' })}
+          >
+            Set Name
+          </button>
+        </>
+      );
+    };
+
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        onSubmit={(v) => (submitted = v)}
+        config={{
+          users: {
+            type: 'array',
+            defaultValue: [{ name: 'Default' }],
+            props: {
+              config: {
+                name: {
+                  type: 'hidden',
+                },
+              },
+            },
+          },
+        }}
+        fieldMapping={{
+          array: ArrayUI,
+          hidden: HiddenField,
+        }}
+      />
+    );
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(submitted).toEqual({
+        users: [],
+      });
+    });
+  });
+
   it('appends item to array and updates form values', async () => {
     let snapshot: any = null;
 
     const ArrayUI = () => {
       const { controller } = useArrayField();
-      return <button type="button" onClick={() => controller.append({})}>Add</button>;
+      return (
+        <button type="button" onClick={() => controller.append({})}>
+          Add
+        </button>
+      );
     };
 
     renderWithBlueFormProvider(
@@ -52,8 +108,13 @@ describe('BlueForm - field array', () => {
       const { controller } = useArrayField();
       return (
         <>
-          <button type="button" onClick={() => controller.append({})}>Add</button>
-          <button type="button" onClick={() => controller.update(0, { name: 'Alice' })}>
+          <button type="button" onClick={() => controller.append({})}>
+            Add
+          </button>
+          <button
+            type="button"
+            onClick={() => controller.update(0, { name: 'Alice' })}
+          >
             Set Name
           </button>
         </>
@@ -95,8 +156,12 @@ describe('BlueForm - field array', () => {
       const { controller } = useArrayField();
       return (
         <>
-          <button type="button" onClick={() => controller.append({})}>Add</button>
-          <button type="button" onClick={() => controller.remove(0)}>Remove</button>
+          <button type="button" onClick={() => controller.append({})}>
+            Add
+          </button>
+          <button type="button" onClick={() => controller.remove(0)}>
+            Remove
+          </button>
         </>
       );
     };
@@ -133,7 +198,12 @@ describe('BlueForm - field array', () => {
     const ArrayUI = () => {
       const { controller } = useArrayField();
       return (
-        <button type="button" onClick={() => controller.append({ name: 'Bob' })}>Add</button>
+        <button
+          type="button"
+          onClick={() => controller.append({ name: 'Bob' })}
+        >
+          Add
+        </button>
       );
     };
 

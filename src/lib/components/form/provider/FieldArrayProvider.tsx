@@ -23,8 +23,8 @@ export const [useArrayField, FieldArrayProvider] = createProvider(
 
     const controller = useFieldArray({
       name: path,
-      rules,
       control,
+      rules,
     });
 
     const errorMessage = getProperty(errors, `${path}.root.message`);

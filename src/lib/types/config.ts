@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ComponentProps, ComponentType, ReactNode } from 'react'
-import { FieldValues } from 'react-hook-form'
-import { TranslatableText } from '../i18n'
-import { FieldResolvedProps } from './input'
-import { ValidationRules } from './rule'
+import type { ComponentProps, ComponentType, ReactNode } from 'react';
+import type { FieldValues } from 'react-hook-form';
+import type { TranslatableText } from '@/components/i18n';
+import type { FieldResolvedProps } from './input';
+import type { ValidationRules } from './rule';
 
 /**
  * Core field types used for logical structuring or custom handling in dynamic forms.
@@ -28,9 +28,9 @@ import { ValidationRules } from './rule'
  *   Ignored by default in automatic rendering; requires full control from the developer.
  *
  */
-export type CoreFieldType = 'ui' | 'group' | 'array' | 'hidden' | 'inline'
+export type CoreFieldType = 'ui' | 'group' | 'array' | 'hidden' | 'inline';
 
-export type ComponentMap = Record<string, ComponentType<any>>
+export type ComponentMap = Record<string, ComponentType<any>>;
 
 /**
  * Configuration for a single form field in a dynamic form engine.
@@ -42,49 +42,49 @@ export type ComponentMap = Record<string, ComponentType<any>>
 export type FormFieldConfig<
   TModel,
   TComponentMap extends ComponentMap,
-  TFieldType extends keyof TComponentMap = keyof TComponentMap,
+  TFieldType extends keyof TComponentMap = keyof TComponentMap
 > = {
   /**
    * The type of field, used to select the appropriate renderer component.
    * Must match a key in the component map.
    */
-  type: TFieldType
+  type: TFieldType;
 
   /**
    * Props to pass to the renderer component associated with the field type.
    */
-  props?: ComponentProps<TComponentMap[TFieldType]>
+  props?: ComponentProps<TComponentMap[TFieldType]>;
 
   /**
    * Field name, used as a key in the form state.
    */
-  name?: string
+  name?: string;
 
   /**
    * Validation rules applied to this field (compatible with React Hook Form).
    */
-  rules?: ValidationRules
+  rules?: ValidationRules;
 
   /**
    * Default value to use when the field has no initial value from the form.
    */
-  defaultValue?: any
+  defaultValue?: any;
 
   /**
    * Main label of the field (supports translation).
    */
-  label?: TranslatableText
+  label?: TranslatableText;
 
   /**
    * Optional helper text or field-level description (supports translation).
    */
-  description?: TranslatableText
+  description?: TranslatableText;
 
   /**
    * When true, the field is rendered in read-only mode.
    * Users can see the value but cannot edit it. Typically styled differently from `disabled`.
    */
-  readOnly?: boolean
+  readOnly?: boolean;
 
   /**
    * Fallback content to display when a field has no value and the form is in read-only mode.
@@ -93,48 +93,41 @@ export type FormFieldConfig<
    * Instead of rendering an empty input or textarea, this fallback will be shown
    * (e.g. `"No data available"`).
    */
-  readOnlyEmptyFallback?: ReactNode
+  readOnlyEmptyFallback?: ReactNode;
 
   /**
    * Optional function to determine whether the field should be visible,
    * based on the current form values.
    */
-  visible?: boolean | ((values: Partial<TModel>) => boolean)
+  visible?: boolean | ((values: Partial<TModel>) => boolean);
 
   /**
    * Optional function to determine whether the field should be disabled,
    * based on the current form values.
    */
-  disabled?: boolean | ((values: Partial<TModel>) => boolean)
+  disabled?: boolean | ((values: Partial<TModel>) => boolean);
 
   /**
    * Optional escape hatch to manually render the field. If provided,
    * the entire rendering of this field will be overridden.
    */
   render?: (context: {
-    fieldProps: FieldResolvedProps
-    props?: ComponentProps<TComponentMap[TFieldType]>
-    children?: ReactNode
-    meta?: Record<string, any>
-  }) => ReactNode
-
-  /**
-   * Transforms the value before it is rendered by the UI.
-   * Useful for formatting or mapping internal values.
-   */
-  transformValue?: (value: Partial<TModel>) => any
-
-  /**
-   * Transforms the value before it is passed to the form on change.
-   * Useful for normalization or cleanup.
-   */
-  transformOnChange?: (value: Partial<TModel>) => any
-}
+    fieldProps: FieldResolvedProps;
+    props?: ComponentProps<TComponentMap[TFieldType]>;
+    children?: ReactNode;
+    meta?: Record<string, any>;
+  }) => ReactNode;
+};
 
 type FieldConfigUnion<TModel, TComponentMap extends ComponentMap> = {
-  [K in keyof TComponentMap]: FormFieldConfig<TModel, TComponentMap, K> & { type: K }
-}[keyof TComponentMap]
+  [K in keyof TComponentMap]: FormFieldConfig<TModel, TComponentMap, K> & {
+    type: K;
+  };
+}[keyof TComponentMap];
 
-export type FormConfig<TModel extends FieldValues, TComponentMap extends ComponentMap> = {
-  [K in keyof TModel]?: FieldConfigUnion<TModel, TComponentMap>
-}
+export type FormConfig<
+  TModel extends FieldValues,
+  TComponentMap extends ComponentMap
+> = {
+  [K in keyof TModel]?: FieldConfigUnion<TModel, TComponentMap>;
+};
