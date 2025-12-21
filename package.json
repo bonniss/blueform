@@ -75,7 +75,6 @@
   "dependencies": {
     "@hookform/devtools": "^4.4.0",
     "just-debounce-it": "^3.2.0",
-    "just-safe-get": "^4.2.0",
     "react-easy-provider": "^0.2.1",
     "react-hook-form": "^7.69.0"
   }
