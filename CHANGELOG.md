@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/bonniss/react-headless-form/compare/v0.1.1...v0.1.2) (2025-12-22)
+
+
+### Bug Fixes
+
+* organize stories ([d661507](https://github.com/bonniss/react-headless-form/commit/d6615076dafd804c98dbeafcabcf281205263373))
+
 ## [0.1.1](https://github.com/bonniss/react-headless-form/compare/v0.1.0...v0.1.1) (2025-12-22)
 
 
