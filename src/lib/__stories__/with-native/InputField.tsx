@@ -27,7 +27,9 @@ const InputField: FunctionComponent<InputFieldProps> = (props) => {
 
   return (
     <div id={id}>
-      <span style={{ marginRight: 10 }}>{label}</span>
+      <span style={{ marginRight: 10 }}>
+        {label} {required && "*"}
+      </span>
       <input
         {...props}
         value={value ?? ""}

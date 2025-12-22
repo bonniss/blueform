@@ -1,12 +1,14 @@
 import { useArrayField } from "@/components"
 import { defineFieldMapping, setupForm } from "@/components/form/setup"
 import { Story } from "@ladle/react"
+import { Button, Fieldset, MantineProvider } from "@mantine/core"
+import "@mantine/core/styles.css"
 import { useState } from "react"
 import { UserProfile } from "../example/types"
 import CheckboxField from "./CheckboxField"
 import InputField from "./InputField"
+import SelectField from "./SelectField"
 import TextAreaField from "./TextAreaField"
-import SelectField from "./SelectField";
 
 const [Form, defineConfig] = setupForm({
   fieldMapping: defineFieldMapping({
@@ -17,7 +19,7 @@ const [Form, defineConfig] = setupForm({
   }),
 })
 
-export const NativeFormWithNativeInput: Story = () => {
+export const FormWithMantineInput: Story = () => {
   const [formData, setFormData] = useState<any>()
 
   return (
@@ -25,7 +27,9 @@ export const NativeFormWithNativeInput: Story = () => {
       <Form<UserProfile>
         onFormChange={(fd) => setFormData(fd)}
         renderRoot={({ children, onSubmit }) => (
-          <form onSubmit={onSubmit}>{children}</form>
+          <MantineProvider>
+            <form onSubmit={onSubmit}>{children}</form>
+          </MantineProvider>
         )}
         config={defineConfig({
           name: {
@@ -53,7 +57,7 @@ export const NativeFormWithNativeInput: Story = () => {
             type: "select",
             label: "Role",
             props: {
-              options: [
+              data: [
                 { value: "admin", label: "Admin" },
                 { value: "user", label: "User" },
               ],
@@ -63,12 +67,7 @@ export const NativeFormWithNativeInput: Story = () => {
             type: "group",
             label: "Settings",
             render: ({ children, fieldProps: { label } }) => {
-              return (
-                <fieldset>
-                  <legend>{label}</legend>
-                  {children}
-                </fieldset>
-              )
+              return <Fieldset legend={label}>{children}</Fieldset>
             },
             props: {
               config: defineConfig<UserProfile["settings"]>({
@@ -91,13 +90,12 @@ export const NativeFormWithNativeInput: Story = () => {
                 controller: { append },
               } = useArrayField()
               return (
-                <fieldset>
-                  <legend>{fieldProps.label}</legend>
+                <Fieldset legend={fieldProps.label}>
                   {children}
-                  <button type="button" onClick={() => append({})}>
+                  <Button type="button" onClick={() => append({})}>
                     Add Address
-                  </button>
-                </fieldset>
+                  </Button>
+                </Fieldset>
               )
             },
             props: {
