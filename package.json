@@ -25,7 +25,7 @@
   "scripts": {
     "dev": "ladle serve",
     "build": "tsc -p tsconfig.build.json && vite build",
-    "static": "ladle build",
+    "static": "ladle build --viteConfig .ladle/vite-build.config.ts",
     "preview": "ladle preview",
     "lint": "npx @biomejs/biome lint --write ./src",
     "format": "npx @biomejs/biome check --write --organize-imports-enabled=true ./src",
