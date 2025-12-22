@@ -2,7 +2,7 @@
   "name": "react-headless-form",
   "description": "Headless form component built on React Hook Form, - bring your own UI",
   "private": false,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packageManager": "pnpm@10.12.1",
   "repository": {
     "type": "git",
