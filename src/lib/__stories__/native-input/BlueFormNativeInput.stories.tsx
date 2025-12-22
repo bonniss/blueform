@@ -1,15 +1,16 @@
-import { setupForm } from "@/components/helper"
-import { ComponentMap } from "@/types"
+import { defineFieldMapping, setupForm } from "@/components/helper"
 import { Story } from "@ladle/react"
 import { useState } from "react"
 import { UserProfile } from "../example/types"
+import CheckboxField from "./CheckboxField"
 import InputField from "./InputField"
 import TextAreaField from "./TextAreaField"
 
-const fieldMapping = {
+const fieldMapping = defineFieldMapping({
   text: InputField,
   longText: TextAreaField,
-} as const satisfies ComponentMap
+  checkbox: CheckboxField,
+})
 
 const [Form, defineConfig] = setupForm({
   fieldMapping,
@@ -47,6 +48,22 @@ export const FormWithNativeInput: Story = () => {
           bio: {
             type: "longText",
             label: "Bio",
+          },
+          settings: {
+            type: "group",
+            label: "Settings",
+            props: {
+              config: defineConfig<UserProfile["settings"]>({
+                newsletter: {
+                  type: "checkbox",
+                  label: "Newsletter",
+                },
+                theme: {
+                  type: "text",
+                  label: "Theme",
+                },
+              }),
+            },
           },
         })}
       />

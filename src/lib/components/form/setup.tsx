@@ -5,6 +5,11 @@ import type {
   FormConfig,
 } from "@/types"
 import type { FieldValues } from "react-hook-form"
+import {
+  PlaceholderForHidden,
+  PlaceholderForInline,
+  PlaceholderForNestedField,
+} from "../helper"
 import BlueForm from "./BlueForm"
 
 /**
@@ -25,6 +30,22 @@ export function createDefineConfigFn<TComponentMap extends ComponentMap>() {
   ): FormConfig<TModel, TComponentMap> {
     return config
   }
+}
+
+export const BASE_MAPPING = {
+  hidden: PlaceholderForHidden,
+  inline: PlaceholderForInline,
+  group: PlaceholderForNestedField,
+  ui: PlaceholderForNestedField,
+} as const satisfies ComponentMap
+
+export const defineFieldMapping = <TUserMap extends ComponentMap>(
+  userMapping: TUserMap
+) => {
+  return {
+    ...BASE_MAPPING,
+    ...userMapping,
+  } as const satisfies ComponentMap
 }
 
 export const setupForm = <TComponentMap extends ComponentMap>(
