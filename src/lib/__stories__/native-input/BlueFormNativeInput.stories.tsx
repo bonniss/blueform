@@ -4,11 +4,11 @@ import { Story } from "@ladle/react"
 import { useState } from "react"
 import { UserProfile } from "../example/types"
 import InputField from "./InputField"
+import TextAreaField from "./TextAreaField"
 
 const fieldMapping = {
   text: InputField,
-  hana: InputField,
-  hoho: InputField,
+  longText: TextAreaField,
 } as const satisfies ComponentMap
 
 const [Form, defineConfig] = setupForm({
@@ -28,16 +28,25 @@ export const FormWithNativeInput: Story = () => {
         )}
         config={defineConfig({
           name: {
-            type: "hoho",
+            type: "text",
             label: "Name",
             props: {
-              className: "input-class",
-              placeholder: "Here is a custom placeholder",
-              style: {
-                color: "red",
-              },
+              type: "text",
             },
-            rules: { required: "Name is required" },
+            rules: {
+              required: true,
+            },
+          },
+          password: {
+            type: "text",
+            label: "Password",
+            props: {
+              type: "password",
+            },
+          },
+          bio: {
+            type: "longText",
+            label: "Bio",
           },
         })}
       />
