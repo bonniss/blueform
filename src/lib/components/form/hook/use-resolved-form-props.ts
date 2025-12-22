@@ -7,7 +7,7 @@ import type { BlueFormProps, ComponentMap } from "@/types"
 import type { I18nResolvedConfig } from "@/types/form"
 import { useBlueFormProvider } from "../provider"
 
-export const useResolvedProps = <
+export const useResolvedFormProps = <
   TModel extends FieldValues,
   TComponentMap extends ComponentMap
 >(

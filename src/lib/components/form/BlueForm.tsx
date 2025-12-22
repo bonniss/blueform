@@ -14,7 +14,7 @@ import {
 import { BlueFormRef } from '@/types/form';
 import type { BlueFormProps, ComponentMap } from '../../types';
 import BlueFormEngine from './BlueFormEngine';
-import { useResolvedProps } from './hook/use-resolved-form-props';
+import { useResolvedFormProps } from './hook/use-resolved-form-props';
 
 export function BlueFormInner<
   TModel extends FieldValues,
@@ -43,7 +43,7 @@ export function BlueFormInner<
     onSubmitSuccess,
     onSubmitError,
     ...props
-  } = useResolvedProps(blueFormProps)
+  } = useResolvedFormProps(blueFormProps)
 
   const form = useForm<TModel>({
     mode: "onTouched",
