@@ -5,6 +5,7 @@ import dts from "vite-plugin-dts"
 import tsconfigPaths from "vite-tsconfig-paths"
 import { configDefaults, defineConfig } from "vitest/config"
 import { name } from "./package.json"
+import tscBuildConfig from "./tsconfig.build.json"
 
 const app = async (): Promise<UserConfigExport> => {
   /**
@@ -48,7 +49,8 @@ const app = async (): Promise<UserConfigExport> => {
       coverage: {
         exclude: [
           ...(configDefaults.coverage.exclude ?? []),
-          "**/*.stories.tsx",
+          ...tscBuildConfig.exclude,
+          "ladle-static/**",
           "**/*.config.js",
         ],
       },
