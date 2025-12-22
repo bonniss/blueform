@@ -1,8 +1,8 @@
-import { BlueForm, HiddenField } from "@/components"
-import { useArrayField } from "@/components/form/provider"
-import { fireEvent, screen, waitFor } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
-import { renderWithBlueFormProvider } from "../_utils/render-form"
+import { BlueForm, HiddenField } from "@/components";
+import { useArrayField } from "@/components/form/provider";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { renderWithBlueFormProvider } from "../_utils/render-form";
 
 const TestRoot = ({ children, onSubmit }: any) => (
   <form onSubmit={onSubmit}>
@@ -313,6 +313,146 @@ describe("BlueForm - field array", () => {
     fireEvent.click(screen.getByText("Add user"))
     await waitFor(() => {
       expect(screen.getByTestId("user-item")).toBeDefined()
+    })
+  })
+
+  it("shows error when array is required and empty", async () => {
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        config={{
+          users: {
+            type: "array",
+            rules: { required: "Users is required" },
+            render: ({ fieldProps }) => {
+              const { controller } = useArrayField()
+              return (
+                <>
+                  {fieldProps.errorMessage && (
+                    <div data-testid="error">{fieldProps.errorMessage}</div>
+                  )}
+                  <button data-testid="submit" type="submit">
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => controller.append({ name: "" })}
+                  >
+                    Add
+                  </button>
+                </>
+              )
+            },
+            props: {
+              config: {
+                name: {
+                  type: "inline",
+                  render: () => <div />,
+                },
+              },
+            },
+          },
+        }}
+      />
+    )
+
+    fireEvent.click(screen.getByTestId("submit"))
+
+    await waitFor(() => {
+      expect(screen.getByTestId("error")).toBeDefined()
+    })
+  })
+
+  it("shows error when array length is less than minLength", async () => {
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        config={{
+          users: {
+            type: "array",
+            rules: { minLength: { value: 2, message: "At least 2 users" } },
+            render: ({ fieldProps }) => {
+              const { controller } = useArrayField()
+              return (
+                <>
+                  {fieldProps.errorMessage && (
+                    <div data-testid="error">{fieldProps.errorMessage}</div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => controller.append({ name: "" })}
+                  >
+                    Add
+                  </button>
+                  <button type="submit" />
+                </>
+              )
+            },
+            props: {
+              config: {
+                name: {
+                  type: "inline",
+                  render: () => <div />,
+                },
+              },
+            },
+          },
+        }}
+      />
+    )
+
+    fireEvent.click(screen.getByText("Add"))
+    fireEvent.click(screen.getByText("Submit"))
+
+    await waitFor(() => {
+      expect(screen.getByTestId("error")).toBeDefined()
+    })
+  })
+
+  it("shows error when array length exceeds maxLength", async () => {
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        config={{
+          users: {
+            type: "array",
+            rules: { maxLength: { value: 1, message: "Only 1 user allowed" } },
+            render: ({ fieldProps }) => {
+              const { controller } = useArrayField()
+              return (
+                <>
+                  {fieldProps.errorMessage && (
+                    <div data-testid="error">{fieldProps.errorMessage}</div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => controller.append({ name: "" })}
+                  >
+                    Add
+                  </button>
+                  <button type="submit" />
+                </>
+              )
+            },
+            props: {
+              config: {
+                name: {
+                  type: "inline",
+                  render: () => <div />,
+                },
+              },
+            },
+          },
+        }}
+      />
+    )
+
+    fireEvent.click(screen.getByText("Add"))
+    fireEvent.click(screen.getByText("Add"))
+    fireEvent.click(screen.getByText("Submit"))
+
+    await waitFor(() => {
+      expect(screen.getByTestId("error")).toBeDefined()
     })
   })
 })
