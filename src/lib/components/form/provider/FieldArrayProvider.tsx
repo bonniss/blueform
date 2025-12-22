@@ -16,6 +16,7 @@ export const [useArrayField, FieldArrayProvider] = createProvider(
   (params: FieldArrayProviderParams | undefined) => {
     const { resolved, config } = params!
     const { path, rules } = resolved
+    const itemConfig = config.props?.config
 
     const {
       control,
@@ -36,13 +37,15 @@ export const [useArrayField, FieldArrayProvider] = createProvider(
 
     const { fields } = controller
 
-    const renderItem = (field: (typeof fields)[number], index: number) => (
-      <BlueFormEngine
-        key={field.id ?? index}
-        config={config as any}
-        namespace={`${path}.${index}`}
-      />
-    )
+    const renderItem = (field: (typeof fields)[number], index: number) => {
+      return (
+        <BlueFormEngine
+          key={field.id ?? index}
+          config={itemConfig}
+          namespace={`${path}.${index}`}
+        />
+      )
+    }
 
     return {
       renderItem,

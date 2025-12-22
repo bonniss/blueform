@@ -12,6 +12,7 @@ import type {
 } from "@/types"
 
 import { typedKeys } from "../../helper/typed-keys"
+import { ArrayRenderSlot } from "../field"
 import HiddenField from "../field/HiddenField"
 import InlineField from "../field/InlineField"
 import { FieldArrayProvider } from "../provider"
@@ -120,10 +121,7 @@ function BlueFormEngine<
                 {ArrayField ? (
                   <ArrayField {...componentProps} />
                 ) : (
-                  render?.({
-                    // NOTE: this is just a placeholder to satisfy the type checker, all logic below this tree should be provided via `useArrayField`
-                    fieldProps: resolvedProps,
-                  })
+                  <ArrayRenderSlot render={render} />
                 )}
               </FieldArrayProvider>
             )

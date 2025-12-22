@@ -1,8 +1,8 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
 import { BlueForm, HiddenField } from "@/components"
-import { renderWithBlueFormProvider } from "../_utils/render-form"
 import { useArrayField } from "@/components/form/provider"
+import { fireEvent, screen, waitFor } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+import { renderWithBlueFormProvider } from "../_utils/render-form"
 
 const TestRoot = ({ children, onSubmit }: any) => (
   <form onSubmit={onSubmit}>
@@ -269,6 +269,50 @@ describe("BlueForm - field array", () => {
       expect(submitted).toEqual({
         users: [{ name: "Bob" }],
       })
+    })
+  })
+
+  it("supports useArrayField with renderItem inside array render()", async () => {
+    renderWithBlueFormProvider(
+      <BlueForm
+        renderRoot={TestRoot}
+        config={{
+          users: {
+            type: "array",
+            render: () => {
+              const { controller, renderItem } = useArrayField()
+              return (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => controller.append({ name: "Alice" })}
+                  >
+                    Add user
+                  </button>
+
+                  {controller.fields?.map((field, index) =>
+                    renderItem(field, index)
+                  )}
+                </>
+              )
+            },
+            props: {
+              config: {
+                name: {
+                  type: "inline",
+                  render: () => <div data-testid="user-item" />,
+                },
+              },
+            },
+          },
+        }}
+      />
+    )
+
+    expect(screen.queryByTestId("user-item")).toBeNull()
+    fireEvent.click(screen.getByText("Add user"))
+    await waitFor(() => {
+      expect(screen.getByTestId("user-item")).toBeDefined()
     })
   })
 })
