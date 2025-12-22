@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/bonniss/react-headless-form/compare/v0.1.0...v0.1.1) (2025-12-22)
+
+
+### Bug Fixes
+
+* build ladle ([718e3f7](https://github.com/bonniss/react-headless-form/commit/718e3f7187eada435ebb5d084f68c7cf77099be3))
+
 ## 0.1.0 (2025-12-20)
 
 
