@@ -221,15 +221,15 @@
       "namedExport": "Mantine",
       "meta": {}
     },
-    "with-ui-libraries--native-web": {
-      "name": "Native web",
+    "with-ui-libraries--tailwind": {
+      "name": "Tailwind",
       "levels": [
         "With ui libraries"
       ],
-      "locStart": 24,
-      "locEnd": 133,
-      "filePath": "src/lib/__stories__/examples/with-ui-libraries/NativeWeb.stories.tsx",
-      "namedExport": "NativeWeb",
+      "locStart": 25,
+      "locEnd": 155,
+      "filePath": "src/lib/__stories__/examples/with-ui-libraries/tailwind.stories.tsx",
+      "namedExport": "Tailwind",
       "meta": {}
     }
   }
