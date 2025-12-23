@@ -680,7 +680,7 @@ Fields should never need to know about locales or translation libraries.
 
 ### Basic setup
 
-i18n is configured once during `setupForm`. i18n is completely optional. If no `i18nConfig` is provided, all text values are treated as plain strings. 
+i18n is configured once during `setupForm`. i18n is completely optional. If no `i18nConfig` is provided, all text values are treated as plain strings.
 
 ```ts
 const [Form, defineConfig] = setupForm({
@@ -731,6 +731,21 @@ defineConfig({
     },
   },
 })
+```
+
+## Devtools
+
+BlueForm ships with an optional integration for [React Hook Form DevTools](https://react-hook-form.com/dev-tools), allowing you to inspect form state in real time during development.
+
+This integration is designed as a plugin, not a core requirement.
+
+```tsx
+import devToolPlugin from 'blueform';
+
+<Form
+  renderRoot={TestRoot}
+  plugins={[devToolPlugin()]}
+/>
 ```
 
 ## License
