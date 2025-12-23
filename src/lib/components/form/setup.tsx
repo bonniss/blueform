@@ -11,11 +11,11 @@ import { forwardRef } from "react"
 import type { FieldValues } from "react-hook-form"
 import BlueForm from "./BlueForm"
 
-export const PlaceholderForNestedField = null as unknown as ComponentType<
+const PlaceholderForNestedField = null as unknown as ComponentType<
   NestedFieldProps<any, any>
 >
-export const PlaceholderForHidden = null as unknown as ComponentType<any>
-export const PlaceholderForInline = null as unknown as ComponentType<any>
+const PlaceholderForHidden = null as unknown as ComponentType<any>
+const PlaceholderForInline = null as unknown as ComponentType<any>
 
 /**
  * A factory function that returns a utility function to create a
@@ -28,7 +28,7 @@ export const PlaceholderForInline = null as unknown as ComponentType<any>
  * parameter, which represents the component map used by the form
  * engine.
  */
-export function createDefineConfigFn<TComponentMap extends ComponentMap>() {
+function createDefineConfigFn<TComponentMap extends ComponentMap>() {
   return function configForm<TModel extends FieldValues>(
     config: FormConfig<TModel, TComponentMap>
   ): FormConfig<TModel, TComponentMap> {
