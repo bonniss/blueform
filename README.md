@@ -6,9 +6,9 @@
 
 **BlueForm** is a headless form orchestration layer built on top of React Hook Form.
 
-React Hook Form is brilliant. It removes a large amount of boilerplate and makes building forms faster and easier. But as applications grow, the patterns used to wire React Hook Form itself often become the next layer of boilerplate.
+React Hook Form (RHF) is brilliant. It removes a large amount of boilerplate and makes building forms faster and easier. But as applications grow, the patterns used to wire RHF itself often become the next layer of boilerplate.
 
-At that point, form code starts to look familiar across projects. You copy and paste setup logic from previous apps, slightly adjusting it each time. You stop to think about questions about wiring details: should this input use register, useController, or `<Controller />` to integrate this field with a new UI library? How do we make this input reusable without leaking form logic everywhere? These decisions are not hard individually, but they add friction. Over time, teams accumulate multiple patterns for doing essentially the same thing. Different forms integrate React Hook Form in slightly different ways. The real challenge becomes orchestration: how fields are described, how they are composed, how behavior is expressed, and how form logic stays consistent as complexity grows.
+You copy and paste setup logic from previous apps, slightly adjusting it each time. You stop to think about questions about wiring details: should this input use register, useController, or `<Controller />` to integrate this field with a new UI library? These decisions are not hard individually, but they add friction. Over time, teams accumulate multiple patterns for doing essentially the same thing. The real challenge becomes orchestration: how fields are described, how they are composed, how behavior is expressed, and how form logic stays consistent as complexity grows.
 
 With BlueForm, building a form becomes a structured process:
 
@@ -40,11 +40,7 @@ npm install blueform
 
 #### The field
 
-Obviously, we start with a native HTML input. A minimal one just:
-
-- knows nothing about the form layout
-- knows nothing about submission
-- only implements the field contract
+Obviously, we start with a native HTML input.
 
 ```tsx
 import { useField } from "blueform"
@@ -135,7 +131,7 @@ export default function LoginPage() {
 }
 ```
 
-The form just works without needing to understand many details about how React Hook Form works under the hood.
+The form just works without needing to understand many details about how RHF works under the hood.
 
 ### More examples
 
@@ -221,7 +217,7 @@ addresses: {
 }
 ```
 
-Array fields are backed by React Hook Form’s `useFieldArray` under the hood.
+Array fields are backed by RHF’s `useFieldArray` under the hood.
 
 ### `hidden`
 
@@ -404,7 +400,7 @@ This gives you:
 
 ### `useField`
 
-Every field component interacts with the form through a shared contract, exposed via `useField`. It exposes a **stable, normalized interface** on top of React Hook Form’s `useController`, so field authors do not need to interact with RHF directly.
+Every field component interacts with the form through a shared contract, exposed via `useField`. It exposes a **stable, normalized interface** on top of RHF’s `useController`, so field authors do not need to interact with RHF directly.
 
 ```ts
 const { fieldProps, controller, config } = useField()
@@ -425,7 +421,7 @@ fieldProps.onChange
 ```
 
 - `value`
-  The current field value, sourced from React Hook Form via `useController`.
+  The current field value, sourced from RHF via `useController`.
 
 - `onChange`
   A change handler that **expects the final value**, not a DOM event.
@@ -441,7 +437,7 @@ onChange?.(e) // ❌ incorrect
 fieldProps.errorMessage
 ```
 
-- A translated error message derived from React Hook Form’s validation state
+- A translated error message derived from RHF’s validation state
 - Ready to be rendered directly
 
 ```tsx
@@ -465,7 +461,7 @@ fieldProps.namespace
   The field key within its immediate object (e.g. `"email"`)
 
 - `path`
-  The full path used by React Hook Form (e.g. `"profile.email"`)
+  The full path used by RHF (e.g. `"profile.email"`)
 
 - `namespace`
   The parent scope, when the field is nested
@@ -540,7 +536,7 @@ if (!visible) return null
 const { controller } = useField()
 ```
 
-This is the raw result of React Hook Form’s `useController`.
+This is the raw result of RHF’s `useController`.
 
 Most fields **should not need this**.
 
@@ -562,7 +558,7 @@ const { config } = useField()
 
 ### `useArrayField`
 
-`useArrayField` is the field-level API for working with **array fields**. It provides a thin, predictable abstraction on top of React Hook Form’s `useFieldArray`.
+`useArrayField` is the field-level API for working with **array fields**. It provides a thin, predictable abstraction on top of RHF’s `useFieldArray`.
 
 ```ts
 const { fieldProps, controller, renderItem } = useArrayField()
@@ -598,7 +594,7 @@ This allows you to display errors related to the array itself, not individual it
 const { fields, append, remove, insert, move } = controller
 ```
 
-`controller` is the result of React Hook Form’s `useFieldArray`.
+`controller` is the result of RHF’s `useFieldArray`.
 
 It exposes imperative helpers for managing array items:
 
@@ -709,7 +705,7 @@ const [Form, defineConfig] = setupForm({
 })
 ```
 
-Validation rules remain standard React Hook Form rules.
+Validation rules remain standard RHF rules.
 
 ### Example: using i18next
 
