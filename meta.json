@@ -1,0 +1,236 @@
+{
+  "about": {
+    "homepage": "https://www.ladle.dev",
+    "github": "https://github.com/tajo/ladle",
+    "version": 1
+  },
+  "stories": {
+    "core--builtin-types--array-field": {
+      "name": "Array field",
+      "levels": [
+        "Core",
+        "Builtin types"
+      ],
+      "locStart": 30,
+      "locEnd": 71,
+      "filePath": "src/lib/__stories__/examples/basic/array-field.stories.tsx",
+      "namedExport": "ArrayFields",
+      "meta": {}
+    },
+    "core--builtin-types--nested-field": {
+      "name": "Nested field",
+      "levels": [
+        "Core",
+        "Builtin types"
+      ],
+      "locStart": 29,
+      "locEnd": 63,
+      "filePath": "src/lib/__stories__/examples/basic/group-field.stories.tsx",
+      "namedExport": "GroupAndNestedFields",
+      "meta": {}
+    },
+    "core--hello-world": {
+      "name": "Hello world",
+      "levels": [
+        "Core"
+      ],
+      "locStart": 15,
+      "locEnd": 32,
+      "filePath": "src/lib/__stories__/examples/basic/hello.stories.tsx",
+      "namedExport": "HelloWorld",
+      "meta": {}
+    },
+    "core--builtin-types--hidden-field": {
+      "name": "Hidden field",
+      "levels": [
+        "Core",
+        "Builtin types"
+      ],
+      "locStart": 29,
+      "locEnd": 55,
+      "filePath": "src/lib/__stories__/examples/basic/hidden.stories.tsx",
+      "namedExport": "HiddenField",
+      "meta": {}
+    },
+    "core--i18n--messages": {
+      "name": "Messages",
+      "levels": [
+        "Core",
+        "I18n"
+      ],
+      "locStart": 33,
+      "locEnd": 48,
+      "filePath": "src/lib/__stories__/examples/basic/i18n-message.stories.tsx",
+      "namedExport": "I18nTranslateMessages",
+      "meta": {}
+    },
+    "core--i18n--validation": {
+      "name": "Validation",
+      "levels": [
+        "Core",
+        "I18n"
+      ],
+      "locStart": 48,
+      "locEnd": 67,
+      "filePath": "src/lib/__stories__/examples/basic/i18n-validation.stories.tsx",
+      "namedExport": "I18nValidation",
+      "meta": {}
+    },
+    "core--builtin-types--inline-field": {
+      "name": "Inline field",
+      "levels": [
+        "Core",
+        "Builtin types"
+      ],
+      "locStart": 28,
+      "locEnd": 109,
+      "filePath": "src/lib/__stories__/examples/basic/inline-field.stories.tsx",
+      "namedExport": "InlineField",
+      "meta": {}
+    },
+    "core--type-safe-schema": {
+      "name": "Type safe schema",
+      "levels": [
+        "Core"
+      ],
+      "locStart": 20,
+      "locEnd": 43,
+      "filePath": "src/lib/__stories__/examples/basic/typesafe.stories.tsx",
+      "namedExport": "TypeSafeSchema",
+      "meta": {}
+    },
+    "core--builtin-types--ui-only-field": {
+      "name": "Ui only field",
+      "levels": [
+        "Core",
+        "Builtin types"
+      ],
+      "locStart": 22,
+      "locEnd": 51,
+      "filePath": "src/lib/__stories__/examples/basic/ui-field.stories.tsx",
+      "namedExport": "PureUIFields",
+      "meta": {}
+    },
+    "mixed--conditional-fields": {
+      "name": "Conditional fields",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 17,
+      "locEnd": 38,
+      "filePath": "src/lib/__stories__/examples/mixed/conditional.stories.tsx",
+      "namedExport": "ConditionalFields",
+      "meta": {}
+    },
+    "mixed--derived-fields": {
+      "name": "Derived fields",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 56,
+      "locEnd": 88,
+      "filePath": "src/lib/__stories__/examples/mixed/derived.stories.tsx",
+      "namedExport": "DerivedFields",
+      "meta": {}
+    },
+    "mixed--mixed-layout-form": {
+      "name": "Mixed layout form",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 91,
+      "locEnd": 141,
+      "filePath": "src/lib/__stories__/examples/mixed/mixed-layout.stories.tsx",
+      "namedExport": "MixedLayoutForm",
+      "meta": {}
+    },
+    "mixed--multi-tab-form": {
+      "name": "Multi tab form",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 35,
+      "locEnd": 126,
+      "filePath": "src/lib/__stories__/examples/mixed/tabs.stories.tsx",
+      "namedExport": "MultiTabForm",
+      "meta": {}
+    },
+    "mixed--wizard-summary-step": {
+      "name": "Wizard summary step",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 59,
+      "locEnd": 129,
+      "filePath": "src/lib/__stories__/examples/mixed/wizard-summary.stories.tsx",
+      "namedExport": "WizardSummaryStep",
+      "meta": {}
+    },
+    "mixed--wizard-with-validation-guard": {
+      "name": "Wizard with validation guard",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 59,
+      "locEnd": 231,
+      "filePath": "src/lib/__stories__/examples/mixed/wizard-with-guard.stories.tsx",
+      "namedExport": "WizardWithValidationGuard",
+      "meta": {}
+    },
+    "mixed--wizard-form": {
+      "name": "Wizard form",
+      "levels": [
+        "Mixed"
+      ],
+      "locStart": 42,
+      "locEnd": 176,
+      "filePath": "src/lib/__stories__/examples/mixed/wizard.stories.tsx",
+      "namedExport": "WizardForm",
+      "meta": {}
+    },
+    "plugins--dev-tool": {
+      "name": "Dev tool",
+      "levels": [
+        "Plugins"
+      ],
+      "locStart": 24,
+      "locEnd": 135,
+      "filePath": "src/lib/__stories__/examples/plugins/Devtool.stories.tsx",
+      "namedExport": "DevTool",
+      "meta": {}
+    },
+    "with-ui-libraries--ant-design": {
+      "name": "Ant design",
+      "levels": [
+        "With ui libraries"
+      ],
+      "locStart": 25,
+      "locEnd": 133,
+      "filePath": "src/lib/__stories__/examples/with-ui-libraries/Antd.stories.tsx",
+      "namedExport": "AntDesign",
+      "meta": {}
+    },
+    "with-ui-libraries--mantine": {
+      "name": "Mantine",
+      "levels": [
+        "With ui libraries"
+      ],
+      "locStart": 26,
+      "locEnd": 132,
+      "filePath": "src/lib/__stories__/examples/with-ui-libraries/Mantine.stories.tsx",
+      "namedExport": "Mantine",
+      "meta": {}
+    },
+    "with-ui-libraries--native-web": {
+      "name": "Native web",
+      "levels": [
+        "With ui libraries"
+      ],
+      "locStart": 24,
+      "locEnd": 133,
+      "filePath": "src/lib/__stories__/examples/with-ui-libraries/NativeWeb.stories.tsx",
+      "namedExport": "NativeWeb",
+      "meta": {}
+    }
+  }
+}
