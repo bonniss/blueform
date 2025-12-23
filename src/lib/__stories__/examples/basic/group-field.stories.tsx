@@ -61,3 +61,5 @@ export const GroupAndNestedFields: Story = () => {
     </Form>
   )
 }
+
+GroupAndNestedFields.storyName = "Builtin types: Nested field"

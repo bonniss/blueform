@@ -19,7 +19,7 @@ export default {
 
 const [Form, defineConfig] = setupForm({})
 
-export const UIFields: Story = () => {
+export const PureUIFields: Story = () => {
   return (
     <Form
       renderRoot={({ children, onSubmit }) => (
@@ -49,3 +49,5 @@ export const UIFields: Story = () => {
     </Form>
   )
 }
+
+PureUIFields.storyName = "Builtin types: UI-only field"

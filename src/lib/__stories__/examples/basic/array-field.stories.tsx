@@ -69,3 +69,5 @@ export const ArrayFields: Story = () => {
     </Form>
   )
 }
+
+ArrayFields.storyName = "Builtin types: Array field"

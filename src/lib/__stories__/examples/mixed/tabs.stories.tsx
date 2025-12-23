@@ -22,7 +22,7 @@ interface Profile {
 }
 
 export default {
-  title: "Core",
+  title: "Mixed",
 } satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({

@@ -29,7 +29,7 @@ interface WizardForm {
 }
 
 export default {
-  title: "Core",
+  title: "Mixed",
 } satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
@@ -39,7 +39,7 @@ const [Form, defineConfig] = setupForm({
   }),
 })
 
-export const WizardFormStory: Story = () => {
+export const WizardForm: Story = () => {
   const [step, setStep] = useState(0)
 
   const isFirstStep = step === 0

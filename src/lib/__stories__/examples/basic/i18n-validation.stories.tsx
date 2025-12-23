@@ -1,3 +1,10 @@
+/**
+ * Demonstrates full i18n support:
+ * - Translated labels
+ * - Translated descriptions
+ * - Translated validation messages
+ */
+
 import { setupForm, defineFieldMapping } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import InputField from "../../components/with-native/InputField"
@@ -20,10 +27,17 @@ const [Form, defineConfig] = setupForm({
     },
     t: (message, params) => {
       switch (message) {
+        case "label.username":
+          return "Username"
+        case "desc.username":
+          return "Your public username"
+
         case "field.required":
           return `${params?.field} is required`
+
         case "field.minLength":
           return `${params?.field} must be at least ${params?.minLength} characters`
+
         default:
           return message
       }
@@ -31,14 +45,15 @@ const [Form, defineConfig] = setupForm({
   },
 })
 
-export const ValidationAndI18n: Story = () => {
+export const I18nValidation: Story = () => {
   return (
     <Form
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
       config={defineConfig({
         username: {
           type: "text",
-          label: "Username",
+          label: "label.username",
+          description: "desc.username",
           rules: {
             required: true,
             minLength: 4,
@@ -50,3 +65,5 @@ export const ValidationAndI18n: Story = () => {
     </Form>
   )
 }
+
+I18nValidation.storyName = "I18n: Validation"

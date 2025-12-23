@@ -4,7 +4,7 @@ import CheckboxField from "../../components/with-native/CheckboxField"
 import InputField from "../../components/with-native/InputField"
 
 export default {
-  title: "Core",
+  title: "Mixed",
 } satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
