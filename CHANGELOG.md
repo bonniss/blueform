@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/bonniss/blueform/compare/v0.1.3...v0.1.4) (2025-12-23)
+
+
+### Bug Fixes
+
+* downgrade RHF, move devtool to peerDeps ([20f4b66](https://github.com/bonniss/blueform/commit/20f4b66d68e7e75ad9cef476b4b0bce08395c8ae))
+* update README for devtools ([c48a4a3](https://github.com/bonniss/blueform/commit/c48a4a3ba66b4cdd3cfbf83bd90c68a5c0c5c66b))
+
 ## [0.1.3](https://github.com/bonniss/blueform/compare/v0.1.1...v0.1.3) (2025-12-23)
 
 
