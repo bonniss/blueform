@@ -1,4 +1,5 @@
-import { BlueForm, HiddenField } from '@/components';
+import BlueForm from "@/components/form/BlueForm"
+import { HiddenField } from "@/components/form/field"
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { renderWithBlueFormProvider } from '../_utils/render-form';

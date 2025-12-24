@@ -1,18 +1,19 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import { BlueForm, HiddenField } from '@/components';
-import { renderWithBlueFormProvider } from '../_utils/render-form';
+import BlueForm from "@/components/form/BlueForm"
+import { HiddenField } from "@/components/form/field"
+import { fireEvent, screen, waitFor } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+import { renderWithBlueFormProvider } from "../_utils/render-form"
 
 const TestRoot = ({ children, onSubmit }: any) => (
   <form onSubmit={onSubmit}>
     {children}
     <button type="submit">Submit</button>
   </form>
-);
+)
 
-describe('BlueForm – group & ui', () => {
-  it('applies defaultValue inside group namespace', async () => {
-    let submitted: any = null;
+describe("BlueForm – group & ui", () => {
+  it("applies defaultValue inside group namespace", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -20,12 +21,12 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(v) => (submitted = v)}
         config={{
           profile: {
-            type: 'group',
+            type: "group",
             props: {
               config: {
                 name: {
-                  type: 'hidden',
-                  defaultValue: 'Bob',
+                  type: "hidden",
+                  defaultValue: "Bob",
                 },
               },
             },
@@ -35,21 +36,21 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
         profile: {
-          name: 'Bob',
+          name: "Bob",
         },
-      });
-    });
-  });
+      })
+    })
+  })
 
-  it('groups child fields under namespace', async () => {
-    let submitted: any = null;
+  it("groups child fields under namespace", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -57,12 +58,12 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(data) => (submitted = data)}
         config={{
           profile: {
-            type: 'group',
+            type: "group",
             props: {
               config: {
                 userId: {
-                  type: 'hidden',
-                  defaultValue: 'u-123',
+                  type: "hidden",
+                  defaultValue: "u-123",
                 },
               },
             },
@@ -72,21 +73,21 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
         profile: {
-          userId: 'u-123',
+          userId: "u-123",
         },
-      });
-    });
-  });
+      })
+    })
+  })
 
-  it('supports nested groups', async () => {
-    let submitted: any = null;
+  it("supports nested groups", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -94,16 +95,16 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(data) => (submitted = data)}
         config={{
           profile: {
-            type: 'group',
+            type: "group",
             props: {
               config: {
                 address: {
-                  type: 'group',
+                  type: "group",
                   props: {
                     config: {
                       city: {
-                        type: 'hidden',
-                        defaultValue: 'HN',
+                        type: "hidden",
+                        defaultValue: "HN",
                       },
                     },
                   },
@@ -116,23 +117,23 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
         profile: {
           address: {
-            city: 'HN',
+            city: "HN",
           },
         },
-      });
-    });
-  });
+      })
+    })
+  })
 
-  it('applies defaultValue inside ui without namespace', async () => {
-    let submitted: any = null;
+  it("applies defaultValue inside ui without namespace", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -140,12 +141,12 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(v) => (submitted = v)}
         config={{
           layout: {
-            type: 'ui',
+            type: "ui",
             props: {
               config: {
                 name: {
-                  type: 'hidden',
-                  defaultValue: 'Charlie',
+                  type: "hidden",
+                  defaultValue: "Charlie",
                 },
               },
             },
@@ -155,19 +156,19 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
-        name: 'Charlie',
-      });
-    });
-  });
+        name: "Charlie",
+      })
+    })
+  })
 
-  it('ui does not create namespace for child fields', async () => {
-    let submitted: any = null;
+  it("ui does not create namespace for child fields", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -175,12 +176,12 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(data) => (submitted = data)}
         config={{
           layout: {
-            type: 'ui',
+            type: "ui",
             props: {
               config: {
                 userId: {
-                  type: 'hidden',
-                  defaultValue: 'u-123',
+                  type: "hidden",
+                  defaultValue: "u-123",
                 },
               },
             },
@@ -190,19 +191,19 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
-        userId: 'u-123',
-      });
-    });
-  });
+        userId: "u-123",
+      })
+    })
+  })
 
-  it('combines ui and group correctly', async () => {
-    let submitted: any = null;
+  it("combines ui and group correctly", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -210,16 +211,16 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(data) => (submitted = data)}
         config={{
           layout: {
-            type: 'ui',
+            type: "ui",
             props: {
               config: {
                 profile: {
-                  type: 'group',
+                  type: "group",
                   props: {
                     config: {
                       userId: {
-                        type: 'hidden',
-                        defaultValue: 'u-123',
+                        type: "hidden",
+                        defaultValue: "u-123",
                       },
                     },
                   },
@@ -232,21 +233,21 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
         profile: {
-          userId: 'u-123',
+          userId: "u-123",
         },
-      });
-    });
-  });
+      })
+    })
+  })
 
-  it('group render does not affect namespace behavior', async () => {
-    let submitted: any = null;
+  it("group render does not affect namespace behavior", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -254,15 +255,15 @@ describe('BlueForm – group & ui', () => {
         onSubmit={(data) => (submitted = data)}
         config={{
           profile: {
-            type: 'group',
+            type: "group",
             render: ({ children }) => (
               <div data-testid="wrapper">{children}</div>
             ),
             props: {
               config: {
                 userId: {
-                  type: 'hidden',
-                  defaultValue: 'u-123',
+                  type: "hidden",
+                  defaultValue: "u-123",
                 },
               },
             },
@@ -272,18 +273,18 @@ describe('BlueForm – group & ui', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    expect(screen.getByTestId('wrapper')).toBeDefined();
+    expect(screen.getByTestId("wrapper")).toBeDefined()
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
         profile: {
-          userId: 'u-123',
+          userId: "u-123",
         },
-      });
-    });
-  });
-});
+      })
+    })
+  })
+})

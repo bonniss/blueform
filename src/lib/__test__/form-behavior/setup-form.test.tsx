@@ -1,10 +1,10 @@
 // setupForm.test.tsx
+import { useField } from "@/components/form/provider/FieldProvider"
 import {
   BASE_MAPPING,
   defineFieldMapping,
   setupForm,
-  useField,
-} from "@/components"
+} from "@/components/form/setup"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { createRef } from "react"
 import { describe, expect, it, vi } from "vitest"

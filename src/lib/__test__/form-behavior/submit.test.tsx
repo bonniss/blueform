@@ -1,33 +1,34 @@
-import { BlueForm, HiddenField } from '@/components';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
-import { renderWithBlueFormProvider } from '../_utils/render-form';
+import BlueForm from "@/components/form/BlueForm"
+import { HiddenField } from "@/components/form/field"
+import { fireEvent, screen, waitFor } from "@testing-library/react"
+import { describe, expect, it, vi } from "vitest"
+import { renderWithBlueFormProvider } from "../_utils/render-form"
 
 const TestRoot = ({ children, onSubmit }: any) => (
   <form onSubmit={onSubmit}>
     {children}
     <button type="submit">Submit</button>
   </form>
-);
+)
 
-describe('BlueForm – onSubmit', () => {
-  it('calls onSubmit with resolved form values', async () => {
-    let submitted: any = null;
+describe("BlueForm – onSubmit", () => {
+  it("calls onSubmit with resolved form values", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
         renderRoot={TestRoot}
         onSubmit={(data) => {
-          submitted = data;
+          submitted = data
         }}
         config={{
           profile: {
-            type: 'group',
+            type: "group",
             props: {
               config: {
                 userId: {
-                  type: 'hidden',
-                  defaultValue: 'u-123',
+                  type: "hidden",
+                  defaultValue: "u-123",
                 },
               },
             },
@@ -38,50 +39,50 @@ describe('BlueForm – onSubmit', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
       expect(submitted).toEqual({
         profile: {
-          userId: 'u-123',
+          userId: "u-123",
         },
-      });
-    });
-  });
+      })
+    })
+  })
 
-  it('calls onSubmitSuccess after onSubmit', async () => {
-    const calls: string[] = [];
+  it("calls onSubmitSuccess after onSubmit", async () => {
+    const calls: string[] = []
 
     renderWithBlueFormProvider(
       <BlueForm
         renderRoot={TestRoot}
         onSubmit={() => {
-          calls.push('submit');
+          calls.push("submit")
         }}
         onSubmitSuccess={() => {
-          calls.push('success');
+          calls.push("success")
         }}
         config={{
           name: {
-            type: 'inline',
+            type: "inline",
             render: () => null,
           },
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
-      expect(calls).toEqual(['submit', 'success']);
-    });
-  });
+      expect(calls).toEqual(["submit", "success"])
+    })
+  })
 
-  it('calls onSubmitError when validation fails', async () => {
-    const onSubmit = vi.fn();
-    const onSubmitError = vi.fn();
+  it("calls onSubmitError when validation fails", async () => {
+    const onSubmit = vi.fn()
+    const onSubmitError = vi.fn()
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -90,7 +91,7 @@ describe('BlueForm – onSubmit', () => {
         onSubmitError={onSubmitError}
         config={{
           name: {
-            type: 'inline',
+            type: "inline",
             rules: {
               required: true,
             },
@@ -98,19 +99,19 @@ describe('BlueForm – onSubmit', () => {
           },
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
-      expect(onSubmitError).toHaveBeenCalled();
-    });
+      expect(onSubmitError).toHaveBeenCalled()
+    })
 
-    expect(onSubmit).not.toHaveBeenCalled();
-  });
+    expect(onSubmit).not.toHaveBeenCalled()
+  })
 
-  it('does not call onSubmitError when form is valid', async () => {
-    const onSubmitError = vi.fn();
+  it("does not call onSubmitError when form is valid", async () => {
+    const onSubmitError = vi.fn()
 
     renderWithBlueFormProvider(
       <BlueForm
@@ -119,35 +120,35 @@ describe('BlueForm – onSubmit', () => {
         onSubmitError={onSubmitError}
         config={{
           name: {
-            type: 'inline',
+            type: "inline",
             render: () => null,
           },
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
-      expect(onSubmitError).not.toHaveBeenCalled();
-    });
-  });
+      expect(onSubmitError).not.toHaveBeenCalled()
+    })
+  })
 
-  it('supports custom validate rule on submit', async () => {
-    let submitted: any = null;
+  it("supports custom validate rule on submit", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
         renderRoot={TestRoot}
         onSubmit={(data) => {
-          submitted = data;
+          submitted = data
         }}
         config={{
           name: {
-            type: 'hidden',
-            defaultValue: 'ok',
+            type: "hidden",
+            defaultValue: "ok",
             rules: {
-              validate: (value: string) => value === 'ok' || 'Invalid',
+              validate: (value: string) => value === "ok" || "Invalid",
             },
           },
         }}
@@ -155,43 +156,43 @@ describe('BlueForm – onSubmit', () => {
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
-      expect(submitted).toEqual({ name: 'ok' });
-    });
-  });
+      expect(submitted).toEqual({ name: "ok" })
+    })
+  })
 
-  it('submits a stable snapshot of form values', async () => {
-    let submitted: any = null;
+  it("submits a stable snapshot of form values", async () => {
+    let submitted: any = null
 
     renderWithBlueFormProvider(
       <BlueForm
         renderRoot={TestRoot}
         onSubmit={(data) => {
-          submitted = data;
+          submitted = data
         }}
         onSubmitSuccess={(data, form) => {
-          form.setValue('name', 'changed-after-submit');
+          form.setValue("name", "changed-after-submit")
         }}
         config={{
           name: {
-            type: 'hidden',
-            defaultValue: 'initial',
+            type: "hidden",
+            defaultValue: "initial",
           },
         }}
         fieldMapping={{
           hidden: HiddenField,
         }}
       />
-    );
+    )
 
-    fireEvent.click(screen.getByText('Submit'));
+    fireEvent.click(screen.getByText("Submit"))
 
     await waitFor(() => {
-      expect(submitted).toEqual({ name: 'initial' });
-    });
-  });
-});
+      expect(submitted).toEqual({ name: "initial" })
+    })
+  })
+})

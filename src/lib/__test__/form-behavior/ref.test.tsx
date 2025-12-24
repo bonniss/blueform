@@ -1,4 +1,4 @@
-import { BlueForm } from "@/components"
+import BlueForm from "@/components/form/BlueForm"
 import { createRef } from "react"
 import { describe, expect, it } from "vitest"
 import { renderWithBlueFormProvider } from "../_utils/render-form"

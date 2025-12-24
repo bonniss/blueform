@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { BlueForm } from '@/components';
+import BlueForm from "@/components/form/BlueForm"
 import { renderWithBlueFormProvider } from '../_utils/render-form';
 
 const TestRoot = ({ children }: any) => <form>{children}</form>;
