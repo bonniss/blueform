@@ -219,26 +219,40 @@ Visit [our ladle](https://bonniss.github.io/react-headless-form/) for more examp
 
 Form configuration keys are type-checked against your form model.
 
-For nested fields, BlueForm supports **two equivalent authoring styles**:
-
-**Option A: Using builtin type**
-
-For object.
-
 ```ts
 type User = {
+  name: string
   profile: {
-    name: string
     email: string
   }
+  addresses: {
+    city: string
+  }[]
 }
+````
 
+For simple, non-nested fields like `name`, keys map directly to model properties:
+
+```ts
+{
+  name: {
+    type: "text",
+  },
+}
+```
+
+For nested fields, there are two options.
+
+**Option A: Using built-in structural types**
+
+Use `group` for nested objects:
+
+```ts
 {
   profile: {
     type: "group",
     props: {
       config: defineConfig<User["profile"]>({
-        name: { type: "text" },
         email: { type: "text" },
       }),
     },
@@ -246,22 +260,14 @@ type User = {
 }
 ```
 
-For array
+Use `array` for arrays of objects:
 
-```tsx
-type User = {
-  addresses: {
-    street: string
-    city: string
-  }[]
-}
-
+```ts
 {
   addresses: {
     type: "array",
     props: {
       config: defineConfig<User["addresses"][number]>({
-        street: { type: "text" },
         city: { type: "text" },
       }),
     },
@@ -269,28 +275,27 @@ type User = {
 }
 ```
 
-Caveat is you must call `defineConfig` again for the nested model (`User["profile"]`) as TypeScript cannot automatically infer nested object shapes across abstraction boundaries.
+When using `group` or `array`, you must call `defineConfig` again for the nested model (`User["profile"]`, `User["addresses"][number]`), since TypeScript cannot automatically infer nested object shapes across abstraction boundaries.
 
-**Using flat nested keys**
+**Option B: Using flat nested keys**
+
+Alternatively, you can use flat keys with dot notation without defining a nested config:
 
 ```ts
 {
-  "profile.name": {
-    type: "text",
-  },
   "profile.email": {
     type: "text",
   },
 }
 ```
 
-Flat keys are validated using React Hook Form’s `Path<T>` type, so invalid paths are caught at compile time.
+Invalid paths are caught by Typescript:
 
 ```ts
 "profile.age" // ❌ Type error – not part of User
 ```
 
-Flat keys work with object paths only; as array paths containing indices are resolved dynamically at runtime.
+Flat keys apply to **object paths only**; array paths are intentionally excluded, as their indices are resolved dynamically at runtime.
 
 ### Field props
 
@@ -324,7 +329,7 @@ defineConfig<User>({
 
 In many forms, some nodes exist purely for layout or presentation like previews, separators, fieldset. Typically no one should modify the form model just to accommodate UI concerns. These elements simply **should not be checked against the form model**. BlueForm uses a simple convention: configuration keys starting with `__` are treated as **virtual keys**, and TypeScript will not complain about them.
 
-```ts
+```tsx
 <Form<UserForm>
   config={{
     firstName: { type: "text" },
@@ -349,9 +354,17 @@ There are a few important caveats to be aware of. If your form model itself cont
 >
 > Fields still have full access to React Hook Form’s `useFormContext`, which means runtime side effects—such as reading or mutating form state—are always possible. It is therefore up to the developer to follow these conventions with intent and discipline, ensuring that UI-only nodes do not unintentionally modify form state.
 
-## Builtin types
+## Built-in types
 
 BlueForm ships with a small set of built-in field types.
+
+| Type     | Renders UI | In form state | Submitted |
+| -------- | ---------- | ------------- | --------- |
+| `inline` | ✓          | ✓             | ✓         |
+| `ui`     | ✓          | ✗             | ✗         |
+| `group`  | ✓          | ✓             | ✓         |
+| `array`  | ✓          | ✓             | ✓         |
+| `hidden` | ✗          | ✓             | ✓         |
 
 ### `inline`
 
@@ -381,7 +394,7 @@ Use `inline` when:
 
 UI fields are **render-only nodes**. It should meant to be for purely for layout or visual structure, and should be named as a virtual field.
 
-```ts
+```tsx
 __notice: {
   type: "ui",
   render: () => <Divider />,
@@ -392,7 +405,7 @@ __notice: {
 
 Groups allow you to nest fields and structure the form hierarchically.
 
-```ts
+```tsx
 profile: {
   type: "group",
   label: "Profile",
@@ -409,7 +422,7 @@ profile: {
 
 Arrays represent **repeatable groups of fields**.
 
-```ts
+```tsx
 addresses: {
   type: "array",
   label: "Addresses",
@@ -428,21 +441,20 @@ Array fields are backed by RHF’s `useFieldArray` under the hood.
 
 Hidden fields participate in form state but render no visible UI.
 
-```ts
+```tsx
 token: {
   type: "hidden",
   defaultValue: "abc123",
 }
 ```
 
+---
+
 With just these built-in field types, you can cover quite of use cases. For example, the login form shown earlier can be implemented entirely using `inline` fields.
 
 ```tsx
 <Form<LoginForm>
-  onSubmit={(data) => {
-    console.log("login data:", data)
-  }}
-  config={defineConfig({
+  config={{
     username: {
       type: "inline",
       label: "Username",
@@ -450,7 +462,7 @@ With just these built-in field types, you can cover quite of use cases. For exam
         required: "Username is required",
       },
       render: ({ fieldProps: { value, onChange, label, errorMessage } }) => (
-        <div style={{ marginBottom: 12 }}>
+        <div className="form-item">
           <label>{label}</label>
           <input
             value={value ?? ""}
@@ -468,7 +480,7 @@ With just these built-in field types, you can cover quite of use cases. For exam
         required: "Password is required",
       },
       render: ({ fieldProps: { value, onChange, label, errorMessage } }) => (
-        <div style={{ marginBottom: 12 }}>
+        <div className="form-item">
           <label>{label}</label>
           <input
             type="password"
@@ -479,21 +491,11 @@ With just these built-in field types, you can cover quite of use cases. For exam
         </div>
       ),
     },
-  })}
->
-  <button type="submit">Login</button>
-</Form>
+  }}
+/>
 ```
 
-To summarize:
-
-| Type     | Renders UI | In form state | Submitted |
-| -------- | ---------- | ------------- | --------- |
-| `inline` | ✓          | ✓             | ✓         |
-| `ui`     | ✓          | ✗             | ✗         |
-| `group`  | ✓          | ✓             | ✓         |
-| `array`  | ✓          | ✓             | ✓         |
-| `hidden` | ✗          | ✓             | ✓         |
+---
 
 ## Field authoring
 
