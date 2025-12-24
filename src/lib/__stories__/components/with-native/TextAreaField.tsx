@@ -2,7 +2,7 @@ import { useField } from "@/components"
 import { FunctionComponent } from "react"
 
 interface TextAreaFieldProps
-  extends React.InputHTMLAttributes<HTMLTextAreaElement> {}
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const TextAreaField: FunctionComponent<TextAreaFieldProps> = (props) => {
   const {
