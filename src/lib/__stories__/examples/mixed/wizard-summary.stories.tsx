@@ -12,7 +12,7 @@ import { Story, StoryDefault } from "@ladle/react"
 import { useState } from "react"
 import { setupForm, defineFieldMapping } from "@/components/form/setup"
 import { useFormContext } from "react-hook-form"
-import InputField from "@/__stories__/components/with-native/InputField";
+import InputField from "@/__stories__/components/with-native/InputField"
 
 interface WizardForm {
   firstName: string
@@ -24,7 +24,7 @@ export default {
   title: "Mixed",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
   }),
@@ -67,7 +67,7 @@ export const WizardSummaryStep: Story = () => {
       onSubmit={(data) => {
         alert(JSON.stringify(data, null, 2))
       }}
-      config={defineConfig({
+      config={{
         /**
          * Step 1
          */
@@ -94,12 +94,12 @@ export const WizardSummaryStep: Story = () => {
         /**
          * Step 3 – summary
          */
-        summary: {
+        __summary: {
           type: "ui",
           visible: () => step === 2,
           render: () => <SummaryStep />,
         },
-      })}
+      }}
     >
       <div style={{ marginTop: 16 }}>
         {step > 0 && (

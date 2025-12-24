@@ -2,6 +2,7 @@
  * Demonstrates dynamic array fields.
  * Array fields allow runtime addition and removal of field groups.
  */
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: <explanation> */
 import { setupForm, defineFieldMapping } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import { useArrayField } from "@/components"
@@ -31,7 +32,7 @@ export const ArrayFields: Story = () => {
   return (
     <Form<User>
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
-      config={defineConfig<User>({
+      config={{
         addresses: {
           type: "array",
           label: "Addresses",
@@ -63,7 +64,7 @@ export const ArrayFields: Story = () => {
             }),
           },
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

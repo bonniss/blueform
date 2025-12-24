@@ -1,18 +1,19 @@
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: <explanation> */
 import { useArrayField } from "@/components"
 import { defineFieldMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import { Button, Fieldset, MantineProvider } from "@mantine/core"
 import "@mantine/core/styles.css"
 import { useState } from "react"
-import { UserProfile } from "../types"
 import CheckboxField from "../../components/with-mantine/CheckboxField"
 import InputField from "../../components/with-mantine/InputField"
 import SelectField from "../../components/with-mantine/SelectField"
 import TextAreaField from "../../components/with-mantine/TextAreaField"
+import { UserProfile } from "../types"
 
 export default {
   title: "With UI Libraries",
-} satisfies StoryDefault;
+} satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
   fieldMapping: defineFieldMapping({
@@ -36,7 +37,7 @@ export const Mantine: Story = () => {
             <form onSubmit={onSubmit}>{children}</form>
           </MantineProvider>
         )}
-        config={defineConfig({
+        config={{
           name: {
             type: "text",
             label: "Name",
@@ -122,7 +123,7 @@ export const Mantine: Story = () => {
               }),
             },
           },
-        })}
+        }}
       >
         <Button type="submit">Submit</Button>
       </Form>

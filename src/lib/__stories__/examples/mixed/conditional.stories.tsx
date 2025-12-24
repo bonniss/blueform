@@ -7,7 +7,7 @@ export default {
   title: "Mixed",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
     checkbox: CheckboxField,
@@ -20,7 +20,7 @@ export const ConditionalFields: Story = () => {
       renderRoot={({ children, onSubmit }) => (
         <form onSubmit={onSubmit}>{children}</form>
       )}
-      config={defineConfig({
+      config={{
         hasNickname: {
           type: "checkbox",
           label: "Has nickname?",
@@ -30,7 +30,7 @@ export const ConditionalFields: Story = () => {
           label: "Nickname",
           visible: (values) => Boolean(values.hasNickname),
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

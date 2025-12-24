@@ -16,13 +16,14 @@ import { useFormContext } from "react-hook-form"
 interface UserForm {
   firstName: string
   lastName: string
+  fullNamePreview: string
 }
 
 export default {
   title: "Mixed",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
   }),
@@ -62,7 +63,7 @@ export const DerivedFields: Story = () => {
       onSubmit={(data) => {
         alert(JSON.stringify(data, null, 2))
       }}
-      config={defineConfig({
+      config={{
         firstName: {
           type: "text",
           label: "First name",
@@ -80,7 +81,7 @@ export const DerivedFields: Story = () => {
           type: "ui",
           render: () => <FullNamePreview />,
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

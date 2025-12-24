@@ -6,7 +6,7 @@ export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
   }),
@@ -19,12 +19,12 @@ export const HelloWorld: Story = () => {
         <form onSubmit={onSubmit}>{children}</form>
       )}
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
-      config={defineConfig({
+      config={{
         name: {
           type: "text",
           label: "Your name",
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

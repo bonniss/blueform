@@ -9,7 +9,7 @@ export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   renderRoot: ({ children, onSubmit }) => (
     <form onSubmit={onSubmit}>{children}</form>
   ),
@@ -34,13 +34,13 @@ export const I18nTranslateMessages: Story = () => {
   return (
     <Form
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
-      config={defineConfig({
+      config={{
         username: {
           type: "text",
           label: "label.username",
           description: "desc.username",
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

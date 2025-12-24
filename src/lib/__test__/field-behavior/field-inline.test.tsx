@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noAssignInExpressions: <explanation> */
 import { SkipRender, useField } from "@/components"
 import BlueForm from "@/components/form/BlueForm"
 import { fireEvent, screen, waitFor } from "@testing-library/react"

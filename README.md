@@ -194,10 +194,10 @@ The `Form` component returned by `setupForm` is **generic over your form model**
 
 ```tsx
 <Form<LoginForm>
-  config={defineConfig({
+  config={{
     username: { type: "text" },
     password: { type: "text" },
-  })}
+  }}
   onSubmit={(data) => {
     // data is strongly typed as LoginForm
   }}
@@ -216,7 +216,7 @@ Visit [our ladle](https://bonniss.github.io/react-headless-form/) for more examp
 
 ## Type safety
 
-### Type-safe configuration keys
+### Configuration keys
 
 Form configuration keys are type-checked against your form model.
 
@@ -234,7 +234,7 @@ type User = {
   }
 }
 
-defineConfig<User>({
+{
   profile: {
     type: "group",
     props: {
@@ -244,7 +244,7 @@ defineConfig<User>({
       }),
     },
   },
-})
+}
 ```
 
 Caveat is you must call `defineConfig` again for the nested model (`User["profile"]`) as TypeScript cannot automatically infer nested object shapes across abstraction boundaries.
@@ -252,14 +252,14 @@ Caveat is you must call `defineConfig` again for the nested model (`User["profil
 **Using flat nested keys**
 
 ```ts
-defineConfig<User>({
+{
   "profile.name": {
     type: "text",
   },
   "profile.email": {
     type: "text",
   },
-})
+}
 ```
 
 Flat keys are validated using React Hook Form’s `Path<T>` type, so invalid paths are caught at compile time.
@@ -268,7 +268,7 @@ Flat keys are validated using React Hook Form’s `Path<T>` type, so invalid pat
 "profile.age" // ❌ Type error – not part of User
 ```
 
-### Type-safe field props
+### Field props
 
 Each field’s `type` maps directly to a component registered in `fieldMapping`.
 
@@ -295,6 +295,35 @@ defineConfig<User>({
   },
 })
 ```
+
+### Virtual configuration key
+
+In many forms, some nodes exist purely for layout or presentation like previews, separators, fieldset. Typically no one should modify the form model just to accommodate UI concerns. These elements simply **should not be checked against the form model**. BlueForm uses a simple convention: configuration keys starting with `__` are treated as **virtual keys**, and TypeScript will not complain about them.
+
+```ts
+<Form<UserForm>
+  config={{
+    firstName: { type: "text" },
+    lastName: { type: "text" },
+
+    // Typescript will not rant this key
+    __fullNamePreview: {
+      type: "ui",
+      render: () => <FullNamePreview />,
+    },
+  }}
+/>
+```
+
+There are a few important caveats to be aware of. If your form model itself contains fields starting with `__`, those fields will no longer receive type suggestions in the configuration, as the prefix is reserved for virtual keys. Additionally, if you want a field to be type-safe and checked against the model, it must not be virtual—even if it uses a `ui`-like field type. In that case, the field must exist in the model.
+
+### It's just type guidance, not runtime guarantee!
+
+> [!IMPORTANT]
+>
+> The conventions described above are primarily designed to **support the type system and authoring experience**. They are not intended to strictly enforce runtime behavior.
+>
+> Fields still have full access to React Hook Form’s `useFormContext`, which means runtime side effects—such as reading or mutating form state—are always possible. It is therefore up to the developer to follow these conventions with intent and discipline, ensuring that UI-only nodes do not unintentionally modify form state.
 
 ## Builtin types
 
@@ -738,7 +767,7 @@ Fields should never need to know about locales or translation libraries.
 i18n is configured once during `setupForm`. i18n is completely optional. If no `i18nConfig` is provided, all text values are treated as plain strings.
 
 ```ts
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   i18nConfig: {
     t: (message, params) => translate(message, params),
   },
@@ -748,7 +777,7 @@ const [Form, defineConfig] = setupForm({
 ### Translating validation messages
 
 ```ts
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   i18nConfig: {
     validationTranslation: {
       required: "validation.required",
@@ -765,7 +794,7 @@ Validation rules remain standard RHF rules.
 ```ts
 import i18next from "i18next"
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   i18nConfig: {
     t: (key, params) => i18next.t(key, params),
     validationTranslation: {
@@ -776,7 +805,7 @@ const [Form, defineConfig] = setupForm({
 ```
 
 ```ts
-defineConfig({
+{
   username: {
     type: "text",
     label: "form.username.label",
@@ -785,7 +814,7 @@ defineConfig({
       required: true,
     },
   },
-})
+}
 ```
 
 ## Devtools

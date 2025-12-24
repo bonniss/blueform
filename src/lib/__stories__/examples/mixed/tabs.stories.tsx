@@ -68,7 +68,7 @@ export const MultiTabForm: Story = () => {
       onSubmit={(data) => {
         alert(JSON.stringify(data, null, 2))
       }}
-      config={defineConfig<Profile>({
+      config={{
         /**
          * Tab: Basic information
          */
@@ -120,7 +120,7 @@ export const MultiTabForm: Story = () => {
               </fieldset>
             ),
         },
-      })}
+      }}
     />
   )
 }

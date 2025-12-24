@@ -1,4 +1,4 @@
-import { setupForm, defineFieldMapping } from "@/components/form/setup"
+import { defineFieldMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import InputField from "../../components/with-native/InputField"
 
@@ -11,7 +11,7 @@ export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
   }),
@@ -23,7 +23,7 @@ export const TypeSafeSchema: Story = () => {
       renderRoot={({ children, onSubmit }) => (
         <form onSubmit={onSubmit}>{children}</form>
       )}
-      config={defineConfig<User>({
+      config={{
         name: {
           type: "text",
           label: "Name",
@@ -35,7 +35,7 @@ export const TypeSafeSchema: Story = () => {
 
         // ❌ Uncommenting the following line will cause a TypeScript error
         // age: { type: 'text' },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

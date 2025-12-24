@@ -4,11 +4,11 @@ import { defineFieldMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import { Form as AntdForm, Button, Card } from "antd"
 import { useState } from "react"
-import { UserProfile } from "../types"
 import CheckboxField from "../../components/with-antd/CheckboxField"
 import InputField from "../../components/with-antd/InputField"
 import SelectField from "../../components/with-antd/SelectField"
 import TextAreaField from "../../components/with-antd/TextAreaField"
+import { UserProfile } from "../types"
 
 export default {
   title: "With UI Libraries",
@@ -34,7 +34,7 @@ export const AntDesign: Story = () => {
         renderRoot={({ children, onSubmit }) => (
           <AntdForm onFinish={onSubmit}>{children}</AntdForm>
         )}
-        config={defineConfig({
+        config={{
           name: {
             type: "text",
             label: "Name",
@@ -122,7 +122,7 @@ export const AntDesign: Story = () => {
               }),
             },
           },
-        })}
+        }}
       >
         <Button type="primary" htmlType="submit">
           Submit

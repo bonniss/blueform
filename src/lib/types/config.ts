@@ -129,9 +129,14 @@ type FieldConfigUnion<
   }
 }[keyof TComponentMap]
 
+type VirtualFieldKey = `__${string}`
+
 export type FormConfig<
   TModel extends FieldValues,
   TComponentMap extends ComponentMap
 > = {
-  [K in Path<TModel>]?: FieldConfigUnion<TModel, TComponentMap>
+  [K in Path<TModel> | VirtualFieldKey]?: FieldConfigUnion<
+    TModel,
+    TComponentMap
+  >
 }

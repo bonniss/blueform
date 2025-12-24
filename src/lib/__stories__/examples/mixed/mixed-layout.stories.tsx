@@ -14,6 +14,7 @@
 import InputField from "@/__stories__/components/with-native/InputField"
 import TextAreaField from "@/__stories__/components/with-native/TextAreaField"
 import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { LooseShape } from "@/types/utils"
 import { Story, StoryDefault } from "@ladle/react"
 import { useFormContext } from "react-hook-form"
 
@@ -26,7 +27,7 @@ export default {
   title: "Mixed",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
     longText: TextAreaField,
@@ -106,7 +107,7 @@ export const MixedLayoutForm: Story = () => {
       onSubmit={(data) => {
         alert(JSON.stringify(data, null, 2))
       }}
-      config={defineConfig({
+      config={{
         /**
          * Main form fields
          */
@@ -126,16 +127,16 @@ export const MixedLayoutForm: Story = () => {
         /**
          * UI-only layout blocks
          */
-        preview: {
+        __preview: {
           type: "ui",
           render: () => <PreviewPanel />,
         },
 
-        actions: {
+        __actions: {
           type: "ui",
           render: () => <ActionPanel />,
         },
-      })}
+      }}
     />
   )
 }

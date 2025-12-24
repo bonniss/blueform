@@ -1,16 +1,17 @@
-import { useArrayField } from '@/components';
-import { defineFieldMapping, setupForm } from '@/components/form/setup';
-import devToolPlugin from '@/components/plugins/devtool';
-import { Story, StoryDefault } from '@ladle/react';
-import CheckboxField from '../../components/with-native/CheckboxField';
-import InputField from '../../components/with-native/InputField';
-import SelectField from '../../components/with-native/SelectField';
-import TextAreaField from '../../components/with-native/TextAreaField';
-import { UserProfile } from '../types';
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: <explanation> */
+import { useArrayField } from "@/components"
+import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import devToolPlugin from "@/components/plugins/devtool"
+import { Story, StoryDefault } from "@ladle/react"
+import CheckboxField from "../../components/with-native/CheckboxField"
+import InputField from "../../components/with-native/InputField"
+import SelectField from "../../components/with-native/SelectField"
+import TextAreaField from "../../components/with-native/TextAreaField"
+import { UserProfile } from "../types"
 
 export default {
-  title: 'Plugins',
-} satisfies StoryDefault;
+  title: "Plugins",
+} satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
   fieldMapping: defineFieldMapping({
@@ -19,7 +20,7 @@ const [Form, defineConfig] = setupForm({
     checkbox: CheckboxField,
     select: SelectField,
   }),
-});
+})
 
 export const DevTool: Story = () => {
   return (
@@ -28,68 +29,68 @@ export const DevTool: Story = () => {
         onSubmit={(fd) => alert(JSON.stringify(fd, null, 2))}
         plugins={[
           devToolPlugin({
-            placement: 'top-left',
+            placement: "top-left",
           }),
         ]}
         renderRoot={({ children, onSubmit }) => (
           <form onSubmit={onSubmit}>{children}</form>
         )}
-        config={defineConfig({
+        config={{
           name: {
-            type: 'text',
-            label: 'Name',
+            type: "text",
+            label: "Name",
             props: {
-              type: 'text',
+              type: "text",
             },
             rules: {
-              required: 'Name is required',
+              required: "Name is required",
             },
           },
           password: {
-            type: 'text',
-            label: 'Password',
+            type: "text",
+            label: "Password",
             props: {
-              type: 'password',
+              type: "password",
             },
           },
           bio: {
-            type: 'longText',
-            label: 'Bio',
+            type: "longText",
+            label: "Bio",
           },
           role: {
-            type: 'select',
-            label: 'Role',
+            type: "select",
+            label: "Role",
             props: {
               options: [
-                { value: 'admin', label: 'Admin' },
-                { value: 'user', label: 'User' },
+                { value: "admin", label: "Admin" },
+                { value: "user", label: "User" },
               ],
             },
           },
           settings: {
-            type: 'group',
-            label: 'Settings',
+            type: "group",
+            label: "Settings",
             render: ({ children, fieldProps: { label } }) => {
               return (
                 <fieldset>
                   <legend>{label}</legend>
                   {children}
                 </fieldset>
-              );
+              )
             },
             props: {
-              config: defineConfig<UserProfile['settings']>({
+              config: defineConfig<UserProfile["settings"]>({
                 newsletter: {
-                  type: 'checkbox',
-                  label: 'Newsletter',
+                  type: "checkbox",
+                  label: "Newsletter",
                 },
                 theme: {
-                  type: 'select',
-                  label: 'Theme',
+                  type: "select",
+                  label: "Theme",
                   props: {
                     options: [
-                      { value: 'light', label: 'Light' },
-                      { value: 'dark', label: 'Dark' },
+                      { value: "light", label: "Light" },
+                      { value: "dark", label: "Dark" },
                     ],
                   },
                 },
@@ -97,12 +98,12 @@ export const DevTool: Story = () => {
             },
           },
           addresses: {
-            type: 'array',
-            label: 'Address book',
+            type: "array",
+            label: "Address book",
             render: ({ fieldProps, children }) => {
               const {
                 controller: { append },
-              } = useArrayField();
+              } = useArrayField()
               return (
                 <fieldset>
                   <legend>{fieldProps.label}</legend>
@@ -111,25 +112,25 @@ export const DevTool: Story = () => {
                     Add Address
                   </button>
                 </fieldset>
-              );
+              )
             },
             props: {
-              config: defineConfig<UserProfile['addresses'][number]>({
+              config: defineConfig<UserProfile["addresses"][number]>({
                 street: {
-                  type: 'text',
-                  label: 'Street',
+                  type: "text",
+                  label: "Street",
                 },
                 city: {
-                  type: 'text',
-                  label: 'City',
+                  type: "text",
+                  label: "City",
                 },
               }),
             },
           },
-        })}
+        }}
       >
         <button type="submit">Submit</button>
       </Form>
     </>
-  );
-};
+  )
+}

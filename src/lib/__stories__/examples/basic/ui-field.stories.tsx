@@ -17,7 +17,7 @@ export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({})
+const [Form] = setupForm({})
 
 export const PureUIFields: Story = () => {
   return (
@@ -25,7 +25,7 @@ export const PureUIFields: Story = () => {
       renderRoot={({ children, onSubmit }) => (
         <form onSubmit={onSubmit}>{children}</form>
       )}
-      config={defineConfig({
+      config={{
         notice: {
           type: "ui",
           render: () => (
@@ -43,7 +43,7 @@ export const PureUIFields: Story = () => {
           ),
           label: "Name placeholder",
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

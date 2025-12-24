@@ -2,7 +2,7 @@
  * Demonstrates grouped and nested form structures.
  * Groups introduce a namespace and allow custom layout rendering.
  */
-import { setupForm, defineFieldMapping } from "@/components/form/setup"
+import { defineFieldMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import InputField from "../../components/with-native/InputField"
 
@@ -30,7 +30,7 @@ export const GroupAndNestedFields: Story = () => {
   return (
     <Form<UserProfile>
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
-      config={defineConfig<UserProfile>({
+      config={{
         personal: {
           type: "group",
           label: "Personal Information",
@@ -55,7 +55,7 @@ export const GroupAndNestedFields: Story = () => {
             }),
           },
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

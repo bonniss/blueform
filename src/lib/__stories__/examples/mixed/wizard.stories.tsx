@@ -87,7 +87,7 @@ export const WizardForm: Story = () => {
       onSubmit={(data) => {
         alert(JSON.stringify(data, null, 2))
       }}
-      config={defineConfig<WizardForm>({
+      config={{
         /**
          * Step 1: Account
          */
@@ -170,7 +170,7 @@ export const WizardForm: Story = () => {
             }),
           },
         },
-      })}
+      }}
     />
   )
 }

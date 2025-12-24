@@ -14,14 +14,14 @@ import { Story, StoryDefault } from "@ladle/react"
 
 interface InlineForm {
   nickname: string
-  acceptTerms: boolean
+  age: number
 }
 
 export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({}),
 })
 
@@ -32,7 +32,7 @@ export const InlineField: Story = () => {
         <form onSubmit={onSubmit}>{children}</form>
       )}
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
-      config={defineConfig({
+      config={{
         /**
          * Inline field rendered directly.
          */
@@ -101,7 +101,7 @@ export const InlineField: Story = () => {
             )
           },
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>

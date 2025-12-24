@@ -129,7 +129,7 @@ export const WizardWithValidationGuard: Story = () => {
       formProps={{
         mode: "onChange",
       }}
-      config={defineConfig<WizardForm>({
+      config={{
         /**
          * Step 1: Account
          */
@@ -225,7 +225,7 @@ export const WizardWithValidationGuard: Story = () => {
             }),
           },
         },
-      })}
+      }}
     />
   )
 }

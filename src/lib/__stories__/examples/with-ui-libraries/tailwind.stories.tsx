@@ -1,5 +1,7 @@
+/** biome-ignore-all lint/correctness/useHookAtTopLevel: <explanation> */
 import { useArrayField } from "@/components"
 import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import "@/styles/main.css"
 import { Story, StoryDefault } from "@ladle/react"
 import { useState } from "react"
 import CheckboxField from "../../components/with-native/CheckboxField"
@@ -7,7 +9,6 @@ import InputField from "../../components/with-native/InputField"
 import SelectField from "../../components/with-native/SelectField"
 import TextAreaField from "../../components/with-native/TextAreaField"
 import { UserProfile } from "../types"
-import "@/styles/main.css"
 
 export default {
   title: "With UI Libraries",
@@ -38,7 +39,7 @@ export const Tailwind: Story = () => {
             {children}
           </form>
         )}
-        config={defineConfig({
+        config={{
           name: {
             type: "text",
             label: "Name",
@@ -133,7 +134,7 @@ export const Tailwind: Story = () => {
               }),
             },
           },
-        })}
+        }}
       >
         <div className="flex justify-end">
           <button

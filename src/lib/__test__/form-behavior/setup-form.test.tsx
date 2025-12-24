@@ -59,7 +59,6 @@ describe("setupForm", () => {
             type: "ui",
             render: () => <div data-testid="ui">UI</div>,
           },
-
           groupField: {
             type: "group",
             props: {

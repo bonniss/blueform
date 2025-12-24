@@ -20,7 +20,7 @@ export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form, defineConfig] = setupForm({
+const [Form] = setupForm({
   fieldMapping: defineFieldMapping({
     text: InputField,
   }),
@@ -33,7 +33,7 @@ export const HiddenField: Story = () => {
         <form onSubmit={onSubmit}>{children}</form>
       )}
       onSubmit={(data) => alert(JSON.stringify(data, null, 2))}
-      config={defineConfig({
+      config={{
         name: {
           type: "text",
           label: "Name",
@@ -47,7 +47,7 @@ export const HiddenField: Story = () => {
           type: "hidden",
           defaultValue: "secure-token-123",
         },
-      })}
+      }}
     >
       <button type="submit">Submit</button>
     </Form>
