@@ -2,7 +2,7 @@ import { themes } from "prism-react-renderer"
 
 /** @type {import('@ladle/react').UserConfig} */
 export default {
-  base: "/blueform/",
+  base: "/react-headless-form/",
   outDir: "ladle-static",
   defaultStory: "core--hello-world",
   addons: {

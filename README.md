@@ -1,6 +1,14 @@
-# BlueForm - a headless form for React
+# React headless form
 
 > Form as configuration. Bring your own UI, entirely. Great DX. Built on React Hook Form.
+
+## Naming note
+
+Initially, the package was named `blueform`, but npm flagged it as *too similar* to an existing package and rejected the publish. We then decided to switch to **react-headless-form**.
+
+However, using the full name everywhere can be a bit verbose. Shortening it to “RHF” is also not ideal, since it **almost universally refers to React Hook Form** (for the skeptics—just try googling “RHF”).
+
+So internally, and throughout the docs, we refer to the library as **BlueForm**: a short, memorable codename carried over from the original name and used during development and design discussions.
 
 ## Introduction
 
@@ -31,7 +39,7 @@ With BlueForm, you focus on form structure — how fields are organized, how the
 ## Talk is cheap, show me the code
 
 ```sh
-npm install blueform
+npm install react-headless-form
 ```
 
 ### A Login form
@@ -41,14 +49,14 @@ npm install blueform
 Obviously, we start with a native HTML input.
 
 ```tsx
-import { useField } from "blueform"
+import { useField } from "react-headless-form"
 
 type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement>
 
 export default function InputField(props: InputFieldProps) {
   const {
     fieldProps: { value, onChange, label, errorMessage, required, disabled },
-  } = useField<string>()
+  } = useField()
 
   return (
     <div style={{ marginBottom: 12 }}>
@@ -77,7 +85,7 @@ export default function InputField(props: InputFieldProps) {
 #### The form
 
 ```tsx
-import { setupForm, defineFieldMapping } from "blueform"
+import { setupForm, defineFieldMapping } from "react-headless-form"
 import InputField from "./InputField"
 
 // Define the field mapping
@@ -740,12 +748,8 @@ BlueForm ships with an optional integration for [React Hook Form DevTools](https
 This integration is designed as a plugin, not a core requirement.
 
 ```tsx
-import devToolPlugin from 'blueform';
-
-<Form
-  renderRoot={TestRoot}
-  plugins={[devToolPlugin()]}
-/>
+import devToolPlugin from "react-headless-form"
+;<Form renderRoot={TestRoot} plugins={[devToolPlugin()]} />
 ```
 
 ## License
