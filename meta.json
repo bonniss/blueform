@@ -105,8 +105,8 @@
         "Core",
         "Builtin types"
       ],
-      "locStart": 22,
-      "locEnd": 51,
+      "locStart": 24,
+      "locEnd": 53,
       "filePath": "src/lib/__stories__/examples/basic/ui-field.stories.tsx",
       "namedExport": "PureUIFields",
       "meta": {}
