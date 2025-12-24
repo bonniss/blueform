@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-import { FunctionComponent, useEffect } from 'react'
+import { FunctionComponent, useEffect } from "react"
 
-import { useFormContext } from 'react-hook-form'
-import { useField } from '../provider'
+import { useFormContext } from "react-hook-form"
+import { useField } from "../provider"
 
 interface HiddenFieldProps {}
 
 const HiddenField: FunctionComponent<HiddenFieldProps> = () => {
-  const { fieldProps } = useField()
+  const {
+    fieldProps: { value, path },
+  } = useField()
   const { register, setValue } = useFormContext()
-  const { value, path } = fieldProps
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: on component mount
   useEffect(() => {
     if (path) {
       register(path)
@@ -20,7 +22,6 @@ const HiddenField: FunctionComponent<HiddenFieldProps> = () => {
         shouldValidate: false,
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return null
