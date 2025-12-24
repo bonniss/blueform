@@ -6,11 +6,9 @@
 
 ## Naming note
 
-Initially, the package was named `blueform`, but npm flagged it as _too similar_ to an existing package and rejected the publish. We then decided to switch to **react-headless-form**.
+The package was originally named `blueform`, but npm rejected the publication because the name was deemed too similar to an existing package. We then switched to **react-headless-form** — a clear and descriptive name, though somewhat verbose. Unfortunately, abbreviating it as “RHF” isn’t practical, as that acronym is almost universally associated with **React Hook Form** (for the skeptics — just try googling “RHF”).
 
-However, using the full name everywhere can be a bit verbose. Shortening it to “RHF” is also not ideal, since it **almost universally refers to React Hook Form** (for the skeptics—just try googling “RHF”).
-
-So internally, and throughout the docs, we refer to the library as **BlueForm**: a short, memorable codename carried over from the original name and used during development and design discussions.
+For this reason, throughout the documentation we refer to the library simply as **BlueForm**. This is a short, memorable codename carried over from the original `blueform` name, and it’s the term we’ve consistently used during development and design discussions.
 
 ## Introduction
 
@@ -39,6 +37,8 @@ The reason step **0** comes first is intentional. In most applications, fields a
 With BlueForm, you focus on form structure — how fields are organized, how they relate to each other, and how the form behaves as a whole. UI becomes an implementation detail, not the driving concern.
 
 ## Getting started
+
+### Installation
 
 ```sh
 npm install react-headless-form
@@ -87,12 +87,12 @@ export default function InputField(props: InputFieldProps) {
 #### Describe the form
 
 ```tsx
-import { setupForm, defineFieldMapping } from "react-headless-form"
+import { setupForm, defineMapping } from "react-headless-form"
 import InputField from "./InputField"
 
 // Define the field mapping
 const [Form, defineConfig] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
   }),
   // Define how the root form is rendered
@@ -148,46 +148,52 @@ BlueForm does not expose a single global `<Form />` component. Instead, forms ar
 1. It **binds a field mapping** to a form instance
 2. It returns a **typed `Form` component** and a **typed `defineConfig` helper**
 
+You can pass a base configuration to `setupForm` to define shared behavior.
+
 ```ts
 const [Form, defineConfig] = setupForm({
-  fieldMapping,
-  renderRoot,
-  i18nConfig,
+  fieldMapping: defineMapping({
+    text: InputField,
+    select: SelectField,
+  }),
+  renderRoot: ({ children, onSubmit }) => (
+    <form onSubmit={onSubmit}>{children}</form>
+  ),
+  i18nConfig: {
+    t: (message, params) => translate(message, params),
+    validationTranslation: {
+      required: "validation.required",
+    },
+  },
 })
 ```
 
-This setup step establishes a contract:
-
-- which field types are available
-- how those fields are rendered
-- which configuration shape is valid
-
-`fieldMapping` is not just a runtime object—it directly influences the **TypeScript types** of your form configuration.
+All arguments are **optional**. You can also provide or override them later via `<Form />` props — these will take precedence over the values passed to `setupForm`. The only exception is `fieldMapping`: it cannot be overridden because it isn't just a runtime object — it **directly shapes the TypeScript types** of your form configuration. It's is required to use `defineMapping` to ensures that all **built-in field types** (`inline`, `ui`, `group`, `array`, `hidden`) remain available by default. You can then extend or override them with your own custom fields:
 
 ```ts
 const [Form, defineConfig] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
+    // Your custom fields
     text: TextField,
     select: SelectField,
+
+    // You can optionally override built-in ones if needed
+    ui: MyCustomUIField,
+    hidden: MyCustomHiddenField
   }),
 })
 ```
 
-From this point on:
+With the configuration above:
 
-- only `text` and `select` are valid field types
-- invalid field types are caught at compile time
-- field-specific props are type-checked
+- Only `"text"` and `"select"` plus built-in types are valid field types.
+- Invalid field types are caught at **compile time**.
+- Props specific to each field type are fully type-checked.
+
+You can also call `setupForm()` with **no arguments** at all, which falls back to **built-in field types**:
 
 ```ts
-defineConfig({
-  username: {
-    type: "text", // ✅ valid
-  },
-  role: {
-    type: "checkbox", // ❌ type error
-  },
-})
+const [Form] = setupForm()
 ```
 
 The `Form` component returned by `setupForm` is **generic over your form model**. This means `defineConfig` is only needed when introducing a nested typing boundary (for example, `group`, `array`, or custom field configs). For flat keys, the form model type is inferred directly from `Form<TModel>`.
@@ -229,7 +235,7 @@ type User = {
     city: string
   }[]
 }
-````
+```
 
 For simple, non-nested fields like `name`, keys map directly to model properties:
 
@@ -302,7 +308,7 @@ Flat keys apply to **object paths only**; array paths are intentionally excluded
 Each field’s `type` maps directly to a component registered in `fieldMapping`.
 
 ```ts
-const fieldMapping = defineFieldMapping({
+const fieldMapping = defineMapping({
   text: InputField,
   select: SelectField,
 })

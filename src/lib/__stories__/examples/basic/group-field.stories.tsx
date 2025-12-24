@@ -2,7 +2,7 @@
  * Demonstrates grouped and nested form structures.
  * Groups introduce a namespace and allow custom layout rendering.
  */
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import InputField from "../../components/with-native/InputField"
 
@@ -21,7 +21,7 @@ const [Form, defineConfig] = setupForm({
   renderRoot: ({ children, onSubmit }) => (
     <form onSubmit={onSubmit}>{children}</form>
   ),
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
   }),
 })

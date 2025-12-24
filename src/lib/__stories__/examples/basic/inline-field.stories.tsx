@@ -9,7 +9,7 @@
  * one-off UI that still participates in the form.
  */
 
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 
 interface InlineForm {
@@ -22,7 +22,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form] = setupForm({
-  fieldMapping: defineFieldMapping({}),
+  fieldMapping: defineMapping({}),
 })
 
 export const InlineField: Story = () => {

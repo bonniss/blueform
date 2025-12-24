@@ -1,4 +1,4 @@
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import InputField from "../../components/with-native/InputField"
 
@@ -12,7 +12,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
   }),
 })

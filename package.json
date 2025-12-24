@@ -23,6 +23,7 @@
     "node": ">=18"
   },
   "scripts": {
+    "typecheck:test": "tsc",
     "typecheck": "tsc -p tsconfig.build.json",
     "dev": "ladle serve",
     "build": "tsc -p tsconfig.build.json && vite build",

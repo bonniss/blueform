@@ -10,23 +10,25 @@
  * - Form fields
  * - Layout and UI structure
  */
-import { setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 
 export default {
   title: "Core",
 } satisfies StoryDefault
 
-const [Form] = setupForm({})
+const [Form] = setupForm({
+  fieldMapping: defineMapping(),
+})
 
 export const PureUIFields: Story = () => {
   return (
-    <Form
+    <Form<{}>
       renderRoot={({ children, onSubmit }) => (
         <form onSubmit={onSubmit}>{children}</form>
       )}
       config={{
-        notice: {
+        __notice: {
           type: "ui",
           render: () => (
             <div style={{ padding: 12, background: "#f5f5f5" }}>
@@ -34,7 +36,7 @@ export const PureUIFields: Story = () => {
             </div>
           ),
         },
-        name: {
+        __name: {
           type: "ui",
           render: ({ fieldProps }) => (
             <div>

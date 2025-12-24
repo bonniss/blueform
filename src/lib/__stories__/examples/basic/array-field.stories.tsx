@@ -3,7 +3,7 @@
  * Array fields allow runtime addition and removal of field groups.
  */
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: <explanation> */
-import { setupForm, defineFieldMapping } from "@/components/form/setup"
+import { setupForm, defineMapping } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import { useArrayField } from "@/components"
 import InputField from "../../components/with-native/InputField"
@@ -23,7 +23,7 @@ const [Form, defineConfig] = setupForm({
   renderRoot: ({ children, onSubmit }) => (
     <form onSubmit={onSubmit}>{children}</form>
   ),
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
   }),
 })

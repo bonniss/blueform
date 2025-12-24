@@ -17,16 +17,55 @@ const PlaceholderForNestedField = null as unknown as ComponentType<
 const PlaceholderForHidden = null as unknown as ComponentType<any>
 const PlaceholderForInline = null as unknown as ComponentType<any>
 
+export const BASE_MAPPING = {
+  hidden: PlaceholderForHidden,
+  inline: PlaceholderForInline,
+  array: PlaceholderForNestedField,
+  group: PlaceholderForNestedField,
+  ui: PlaceholderForNestedField,
+} as const satisfies ComponentMap
+type DefaultComponentMap = typeof BASE_MAPPING
+
 /**
- * A factory function that returns a utility function to create a
- * form configuration object. The returned utility function takes
- * a form configuration object and returns the same object, which
- * can then be used to configure a dynamic form engine.
+ * Defines the field mapping used by BlueForm.
  *
- * The purpose of this factory function is to allow the form
- * configuration object to be type-checked against a generic type
- * parameter, which represents the component map used by the form
- * engine.
+ * - Can be called without arguments to use the built-in base field types.
+ * - When a custom mapping is provided, it is merged with the base mapping.
+ *
+ * Function overloads are required here to preserve autocomplete and
+ * type inference when `userMapping` is omitted.
+ */
+export function defineMapping(): typeof BASE_MAPPING
+export function defineMapping<TUserMap extends ComponentMap>(
+  userMapping: TUserMap
+): typeof BASE_MAPPING & TUserMap
+export function defineMapping(userMapping?: ComponentMap) {
+  return {
+    ...BASE_MAPPING,
+    ...(userMapping ?? {}),
+  } as const
+}
+
+/**
+ * A typed component signature that preserves JSX generics
+ * while still supporting ref forwarding.
+ *
+ * This exists purely at the type level; at runtime, it is
+ * a single React component created via `forwardRef`.
+ */
+export type TypedFormComponent<TComponentMap extends ComponentMap> = {
+  <TModel extends FieldValues>(
+    props: Omit<BlueFormProps<TModel, TComponentMap>, "fieldMapping"> &
+      React.RefAttributes<BlueFormRef<TModel>>
+  ): JSX.Element
+}
+
+/**
+ * Creates a typed helper for defining form configuration objects.
+ *
+ * This helper exists to bind a form config to a specific component map,
+ * allowing field definitions to be type-checked against the form model
+ * and available field types.
  */
 function createDefineConfigFn<TComponentMap extends ComponentMap>() {
   return function configForm<TModel extends FieldValues>(
@@ -36,59 +75,41 @@ function createDefineConfigFn<TComponentMap extends ComponentMap>() {
   }
 }
 
-export const BASE_MAPPING = {
-  hidden: PlaceholderForHidden,
-  inline: PlaceholderForInline,
-  array: PlaceholderForNestedField,
-  group: PlaceholderForNestedField,
-  ui: PlaceholderForNestedField,
-} as const satisfies ComponentMap
-
-export const defineFieldMapping = <TUserMap extends ComponentMap>(
-  userMapping: TUserMap
-) => {
-  return {
-    ...BASE_MAPPING,
-    ...userMapping,
-  } as const satisfies ComponentMap
-}
-
 /**
- * A typed component signature that preserves JSX generics while still
- * supporting ref forwarding.
+ * Creates a typed Form component and a `defineConfig` helper.
  *
- * This is a TypeScript-level construct; at runtime it is a single component.
+ * - Can be called without arguments to use the built-in base field mapping.
+ * - When a base config is provided, its field mapping is locked in and
+ *   cannot be overridden at the Form level.
+ *
+ * Function overloads are required to preserve base mapping inference
+ * when `setupForm` is called without arguments or with an empty config.
  */
-export type TypedFormComponent<TComponentMap extends ComponentMap> = {
-  <TModel extends FieldValues>(
-    props: Omit<BlueFormProps<TModel, TComponentMap>, "fieldMapping"> &
-      React.RefAttributes<BlueFormRef<TModel>>
-  ): JSX.Element
-}
+export function setupForm(): readonly [
+  TypedFormComponent<DefaultComponentMap>,
+  ReturnType<typeof createDefineConfigFn<DefaultComponentMap>>
+]
+export function setupForm<TUserMap extends ComponentMap>(
+  baseConfig: BlueFormBaseConfig<TUserMap>
+): readonly [
+  TypedFormComponent<TUserMap>,
+  ReturnType<typeof createDefineConfigFn<TUserMap>>
+]
+export function setupForm(baseConfig?: BlueFormBaseConfig<ComponentMap>) {
+  const resolvedConfig = {
+    fieldMapping: defineMapping(),
+    ...baseConfig,
+  }
 
-export const setupForm = <TComponentMap extends ComponentMap>(
-  baseConfig?: BlueFormBaseConfig<TComponentMap>
-) => {
-  const defineConfig = createDefineConfigFn<TComponentMap>()
+  const defineConfig = createDefineConfigFn<any>()
 
-  const InternalForm = forwardRef(function InternalForm<
-    TModel extends FieldValues
-  >(
-    props: Omit<BlueFormProps<TModel, TComponentMap>, "fieldMapping">,
-    ref: React.Ref<BlueFormRef<TModel>>
-  ) {
-    // Exclude fieldMapping from props to prevent override at runtime
+  const InternalForm = forwardRef(function InternalForm(props: any, ref) {
+    // Prevent overriding `fieldMapping` at the Form level.
+    // Field mapping is intentionally fixed at setup time.
     const { fieldMapping: _, ...allowedProps } = props as any
 
-    return <BlueForm ref={ref} {...baseConfig} {...allowedProps} />
+    return <BlueForm ref={ref} {...resolvedConfig} {...allowedProps} />
   })
 
-  /**
-   * This cast is intentional:
-   * - `forwardRef` returns a non-generic component value (JSX cannot pass generics to values).
-   * - We re-type it as a callable generic component to allow `<Form<TModel> />` syntax.
-   */
-  const Form = InternalForm as unknown as TypedFormComponent<TComponentMap>
-
-  return [Form, defineConfig] as const
+  return [InternalForm as any, defineConfig] as const
 }

@@ -2,7 +2,7 @@
 import { useField } from "@/components/form/provider/FieldProvider"
 import {
   BASE_MAPPING,
-  defineFieldMapping,
+  defineMapping,
   setupForm,
 } from "@/components/form/setup"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
@@ -135,7 +135,7 @@ describe("setupForm", () => {
   })
 
   it("includes all base field types", () => {
-    const mapping = defineFieldMapping({})
+    const mapping = defineMapping({})
 
     expect(mapping).toHaveProperty("hidden")
     expect(mapping).toHaveProperty("inline")
@@ -147,7 +147,7 @@ describe("setupForm", () => {
   it("merges user mapping on top of base mapping", () => {
     const MockField = () => null
 
-    const mapping = defineFieldMapping({
+    const mapping = defineMapping({
       mock: MockField,
     })
 
@@ -157,7 +157,7 @@ describe("setupForm", () => {
   it("allows user mapping to override base mapping", () => {
     const CustomHidden = () => null
 
-    const mapping = defineFieldMapping({
+    const mapping = defineMapping({
       hidden: CustomHidden,
     })
 
@@ -167,7 +167,7 @@ describe("setupForm", () => {
   it("does not mutate BASE_MAPPING", () => {
     const originalHidden = BASE_MAPPING.hidden
 
-    defineFieldMapping({
+    defineMapping({
       hidden: () => null,
     })
 
@@ -180,7 +180,7 @@ describe("setupForm", () => {
     }
 
     const [Form] = setupForm({
-      fieldMapping: defineFieldMapping({
+      fieldMapping: defineMapping({
         mock: MockField,
       }),
     })
@@ -208,7 +208,7 @@ describe("setupForm", () => {
     }
 
     const [Form] = setupForm({
-      fieldMapping: defineFieldMapping({
+      fieldMapping: defineMapping({
         text: TextField,
       }),
       i18nConfig: {
@@ -245,7 +245,7 @@ describe("setupForm", () => {
     }
 
     const [Form] = setupForm({
-      fieldMapping: defineFieldMapping({
+      fieldMapping: defineMapping({
         mock: BaseField,
       }),
     })
@@ -253,7 +253,7 @@ describe("setupForm", () => {
     render(
       <Form
         // @ts-expect-error fieldMapping should not be allowed at Form level
-        fieldMapping={defineFieldMapping({
+        fieldMapping={defineMapping({
           mock: OverrideField,
         })}
         renderRoot={({ children }) => <form>{children}</form>}
@@ -269,5 +269,134 @@ describe("setupForm", () => {
     expect(screen.getByTestId("base-field")).toBeTruthy()
     // Override mapping must be ignored
     expect(screen.queryByTestId("override-field")).not.toBeTruthy()
+  })
+
+  it("includes all base field types by default", () => {
+    const [Form] = setupForm()
+
+    const DummyInline = () => <div data-testid="inline" />
+
+    render(
+      <Form
+        renderRoot={({ children }) => <form>{children}</form>}
+        config={{
+          __inline: {
+            type: "inline",
+            render: () => <DummyInline />,
+          },
+        }}
+      />
+    )
+
+    expect(screen.getByTestId("inline")).toBeTruthy()
+  })
+
+  it("does not require defineConfig for flat keys", () => {
+    type User = {
+      name: string
+    }
+
+    const [Form] = setupForm()
+
+    render(
+      <Form<User>
+        renderRoot={({ children }) => <form>{children}</form>}
+        config={{
+          name: {
+            type: "inline",
+            render: () => <div data-testid="name" />,
+          },
+        }}
+      />
+    )
+
+    expect(screen.getByTestId("name")).toBeTruthy()
+  })
+
+  it("supports flat nested keys without defineConfig", () => {
+    type User = {
+      profile: {
+        name: string
+      }
+    }
+
+    const [Form] = setupForm()
+
+    render(
+      <Form<User>
+        renderRoot={({ children }) => <form>{children}</form>}
+        config={{
+          "profile.name": {
+            type: "inline",
+            render: () => <div data-testid="profile-name" />,
+          },
+        }}
+      />
+    )
+
+    expect(screen.getByTestId("profile-name")).toBeTruthy()
+  })
+
+  it("requires defineConfig for group fields", () => {
+    type User = {
+      profile: {
+        name: string
+      }
+    }
+
+    const [Form, defineConfig] = setupForm()
+
+    render(
+      <Form<User>
+        renderRoot={({ children }) => <form>{children}</form>}
+        config={{
+          profile: {
+            type: "group",
+            props: {
+              config: defineConfig<User["profile"]>({
+                name: {
+                  type: "inline",
+                  render: () => <div data-testid="group-name" />,
+                },
+              }),
+            },
+          },
+        }}
+      />
+    )
+
+    expect(screen.getByTestId("group-name")).toBeTruthy()
+  })
+
+  it("requires defineConfig for array fields", () => {
+    type User = {
+      addresses: {
+        city: string
+      }[]
+    }
+
+    const [Form, defineConfig] = setupForm()
+
+    render(
+      <Form<User>
+        renderRoot={({ children }) => <form>{children}</form>}
+        config={{
+          addresses: {
+            type: "array",
+            render: () => <div data-testid="array" />,
+            props: {
+              config: defineConfig<User["addresses"][number]>({
+                city: {
+                  type: "inline",
+                  render: () => <div data-testid="city" />,
+                },
+              }),
+            },
+          },
+        }}
+      />
+    )
+
+    expect(screen.getByTestId("array")).toBeTruthy()
   })
 })

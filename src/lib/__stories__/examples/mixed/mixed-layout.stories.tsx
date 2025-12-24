@@ -13,7 +13,7 @@
 
 import InputField from "@/__stories__/components/with-native/InputField"
 import TextAreaField from "@/__stories__/components/with-native/TextAreaField"
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { LooseShape } from "@/types/utils"
 import { Story, StoryDefault } from "@ladle/react"
 import { useFormContext } from "react-hook-form"
@@ -28,7 +28,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
     longText: TextAreaField,
   }),

@@ -10,7 +10,7 @@
 
 import { Story, StoryDefault } from "@ladle/react"
 import { useState } from "react"
-import { setupForm, defineFieldMapping } from "@/components/form/setup"
+import { setupForm, defineMapping } from "@/components/form/setup"
 import { useFormContext } from "react-hook-form"
 import InputField from "@/__stories__/components/with-native/InputField"
 
@@ -25,7 +25,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
   }),
 })

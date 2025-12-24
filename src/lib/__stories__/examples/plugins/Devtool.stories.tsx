@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useHookAtTopLevel: <explanation> */
 import { useArrayField } from "@/components"
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import devToolPlugin from "@/components/plugins/devtool"
 import { Story, StoryDefault } from "@ladle/react"
 import CheckboxField from "../../components/with-native/CheckboxField"
@@ -14,7 +14,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
     longText: TextAreaField,
     checkbox: CheckboxField,

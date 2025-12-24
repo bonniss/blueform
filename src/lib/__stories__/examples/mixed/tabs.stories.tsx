@@ -7,7 +7,7 @@
  */
 import CheckboxField from "@/__stories__/components/with-native/CheckboxField"
 import InputField from "@/__stories__/components/with-native/InputField"
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import { useState } from "react"
 
@@ -26,7 +26,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
     checkbox: CheckboxField,
   }),

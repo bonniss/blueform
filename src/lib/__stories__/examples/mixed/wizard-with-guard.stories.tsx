@@ -8,7 +8,7 @@
  * The form engine remains unaware of steps or validation flow.
  */
 
-import { setupForm, defineFieldMapping } from "@/components/form/setup"
+import { setupForm, defineMapping } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import { useRef, useState } from "react"
 import type { BlueFormRef } from "@/types/form"
@@ -34,7 +34,7 @@ export default {
 } satisfies StoryDefault
 
 const [Form, defineConfig] = setupForm({
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
     checkbox: CheckboxField,
   }),

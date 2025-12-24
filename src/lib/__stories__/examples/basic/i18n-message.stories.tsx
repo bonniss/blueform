@@ -1,7 +1,7 @@
 /**
  * Demonstrates translating labels and descriptions.
  */
-import { defineFieldMapping, setupForm } from "@/components/form/setup"
+import { defineMapping, setupForm } from "@/components/form/setup"
 import { Story, StoryDefault } from "@ladle/react"
 import InputField from "../../components/with-native/InputField"
 
@@ -13,7 +13,7 @@ const [Form] = setupForm({
   renderRoot: ({ children, onSubmit }) => (
     <form onSubmit={onSubmit}>{children}</form>
   ),
-  fieldMapping: defineFieldMapping({
+  fieldMapping: defineMapping({
     text: InputField,
   }),
   i18nConfig: {
