@@ -177,7 +177,7 @@ const [Form, defineConfig] = setupForm({
 })
 ```
 
-All arguments are **optional**. You can also provide or override them later via `<Form />` props — these will take precedence over the values passed to `setupForm`. The only exception is `fieldMapping`: it cannot be overridden because it isn't just a runtime object — it **directly shapes the TypeScript types** of your form configuration. It's is required to use `defineMapping` to ensures that all **built-in field types** (`inline`, `ui`, `group`, `array`, `hidden`) remain available by default. You can then extend or override them with your own custom fields:
+All arguments are **optional**. They can be provided or overridden later via `<Form />` props, which take precedence over `setupForm`. The only exception is `fieldMapping`: it cannot be overridden because it directly shapes the **TypeScript types** of your form. Use `defineMapping` to ensure all **built-in field types** (`inline`, `ui`, `group`, `array`, `hidden`) remain available by default, then extend or override them with your own custom fields.
 
 ```ts
 const [Form, defineConfig] = setupForm({
