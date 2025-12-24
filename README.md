@@ -2,9 +2,11 @@
 
 > Form as configuration. Bring your own UI, entirely. Great DX. Built on React Hook Form.
 
+![blueform-typesafety](docs/media/blueform-typesafety.gif)
+
 ## Naming note
 
-Initially, the package was named `blueform`, but npm flagged it as *too similar* to an existing package and rejected the publish. We then decided to switch to **react-headless-form**.
+Initially, the package was named `blueform`, but npm flagged it as _too similar_ to an existing package and rejected the publish. We then decided to switch to **react-headless-form**.
 
 However, using the full name everywhere can be a bit verbose. Shortening it to “RHF” is also not ideal, since it **almost universally refers to React Hook Form** (for the skeptics—just try googling “RHF”).
 
@@ -36,15 +38,15 @@ The reason step **0** comes first is intentional. In most applications, fields a
 
 With BlueForm, you focus on form structure — how fields are organized, how they relate to each other, and how the form behaves as a whole. UI becomes an implementation detail, not the driving concern.
 
-## Talk is cheap, show me the code
+## Getting started
 
 ```sh
 npm install react-headless-form
 ```
 
-### A Login form
+### Your first form - A login form
 
-#### The field
+#### Describe the field
 
 Obviously, we start with a native HTML input.
 
@@ -82,7 +84,7 @@ export default function InputField(props: InputFieldProps) {
 }
 ```
 
-#### The form
+#### Describe the form
 
 ```tsx
 import { setupForm, defineFieldMapping } from "react-headless-form"
@@ -139,9 +141,160 @@ export default function LoginPage() {
 
 The form just works without needing to understand many details about how RHF works under the hood.
 
+### Setting up a form
+
+BlueForm does not expose a single global `<Form />` component. Instead, forms are created through a **setup step** using `setupForm` to ensure **strong type safety**. `setupForm` does two things:
+
+1. It **binds a field mapping** to a form instance
+2. It returns a **typed `Form` component** and a **typed `defineConfig` helper**
+
+```ts
+const [Form, defineConfig] = setupForm({
+  fieldMapping,
+  renderRoot,
+  i18nConfig,
+})
+```
+
+This setup step establishes a contract:
+
+- which field types are available
+- how those fields are rendered
+- which configuration shape is valid
+
+`fieldMapping` is not just a runtime object—it directly influences the **TypeScript types** of your form configuration.
+
+```ts
+const [Form, defineConfig] = setupForm({
+  fieldMapping: defineFieldMapping({
+    text: TextField,
+    select: SelectField,
+  }),
+})
+```
+
+From this point on:
+
+- only `text` and `select` are valid field types
+- invalid field types are caught at compile time
+- field-specific props are type-checked
+
+```ts
+defineConfig({
+  username: {
+    type: "text", // ✅ valid
+  },
+  role: {
+    type: "checkbox", // ❌ type error
+  },
+})
+```
+
+The `Form` component returned by `setupForm` is **generic over your form model**:
+
+```tsx
+<Form<LoginForm>
+  config={defineConfig({
+    username: { type: "text" },
+    password: { type: "text" },
+  })}
+  onSubmit={(data) => {
+    // data is strongly typed as LoginForm
+  }}
+/>
+```
+
+This gives you:
+
+- fully typed `onSubmit` data
+- typed access to form methods
+- compile-time guarantees that your configuration matches your data model
+
 ### More examples
 
-Visit our ladle story book for core and advanced examples.
+Visit [our ladle](https://bonniss.github.io/react-headless-form/) for more examples.
+
+## Type safety
+
+### Type-safe configuration keys
+
+Form configuration keys are type-checked against your form model.
+
+For nested fields, BlueForm supports **two equivalent authoring styles**:
+
+**Option A: Using `group` builtin type**
+
+Useful when you need group layout.
+
+```ts
+type User = {
+  profile: {
+    name: string
+    email: string
+  }
+}
+
+defineConfig<User>({
+  profile: {
+    type: "group",
+    props: {
+      config: defineConfig<User["profile"]>({
+        name: { type: "text" },
+        email: { type: "text" },
+      }),
+    },
+  },
+})
+```
+
+Caveat is you must call `defineConfig` again for the nested model (`User["profile"]`) as TypeScript cannot automatically infer nested object shapes across abstraction boundaries.
+
+**Using flat nested keys**
+
+```ts
+defineConfig<User>({
+  "profile.name": {
+    type: "text",
+  },
+  "profile.email": {
+    type: "text",
+  },
+})
+```
+
+Flat keys are validated using React Hook Form’s `Path<T>` type, so invalid paths are caught at compile time.
+
+```ts
+"profile.age" // ❌ Type error – not part of User
+```
+
+### Type-safe field props
+
+Each field’s `type` maps directly to a component registered in `fieldMapping`.
+
+```ts
+const fieldMapping = defineFieldMapping({
+  text: InputField,
+  select: SelectField,
+})
+```
+
+BlueForm ensures that:
+
+- `type` must exist in `fieldMapping`
+- `props` must match the mapped component’s props
+
+```ts
+defineConfig<User>({
+  name: {
+    type: "text",
+    props: {
+      placeholder: "Your name", // ✅ valid
+      options: [], // ❌ invalid for text field
+    },
+  },
+})
+```
 
 ## Builtin types
 
@@ -236,79 +389,54 @@ token: {
 }
 ```
 
-That said, even with just these built-in field types, you can cover quite of use cases. For example, the login form shown earlier can be implemented entirely using `inline` fields.
+With just these built-in field types, you can cover quite of use cases. For example, the login form shown earlier can be implemented entirely using `inline` fields.
 
 ```tsx
-import { setupForm } from "@/components/form/setup"
+<Form<LoginForm>
+  onSubmit={(data) => {
+    console.log("login data:", data)
+  }}
+  config={defineConfig({
+    username: {
+      type: "inline",
+      label: "Username",
+      rules: {
+        required: "Username is required",
+      },
+      render: ({ fieldProps: { value, onChange, label, errorMessage } }) => (
+        <div style={{ marginBottom: 12 }}>
+          <label>{label}</label>
+          <input
+            value={value ?? ""}
+            onChange={(e) => onChange?.(e.target.value)}
+          />
+          {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+        </div>
+      ),
+    },
 
-type LoginForm = {
-  username: string
-  password: string
-}
-
-const [Form, defineConfig] = setupForm({
-  renderRoot: ({ children, onSubmit }) => (
-    <form onSubmit={onSubmit}>{children}</form>
-  ),
-})
-
-export default function LoginPage() {
-  return (
-    <Form<LoginForm>
-      onSubmit={(data) => {
-        console.log("login data:", data)
-      }}
-      config={defineConfig({
-        username: {
-          type: "inline",
-          label: "Username",
-          rules: {
-            required: "Username is required",
-          },
-          render: ({
-            fieldProps: { value, onChange, label, errorMessage },
-          }) => (
-            <div style={{ marginBottom: 12 }}>
-              <label>{label}</label>
-              <input
-                value={value ?? ""}
-                onChange={(e) => onChange?.(e.target.value)}
-              />
-              {errorMessage && (
-                <div style={{ color: "red" }}>{errorMessage}</div>
-              )}
-            </div>
-          ),
-        },
-
-        password: {
-          type: "inline",
-          label: "Password",
-          rules: {
-            required: "Password is required",
-          },
-          render: ({
-            fieldProps: { value, onChange, label, errorMessage },
-          }) => (
-            <div style={{ marginBottom: 12 }}>
-              <label>{label}</label>
-              <input
-                type="password"
-                value={value ?? ""}
-                onChange={(e) => onChange?.(e.target.value)}
-              />
-              {errorMessage && (
-                <div style={{ color: "red" }}>{errorMessage}</div>
-              )}
-            </div>
-          ),
-        },
-      })}
-    >
-      <button type="submit">Login</button>
-    </Form>
-  )
-}
+    password: {
+      type: "inline",
+      label: "Password",
+      rules: {
+        required: "Password is required",
+      },
+      render: ({ fieldProps: { value, onChange, label, errorMessage } }) => (
+        <div style={{ marginBottom: 12 }}>
+          <label>{label}</label>
+          <input
+            type="password"
+            value={value ?? ""}
+            onChange={(e) => onChange?.(e.target.value)}
+          />
+          {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+        </div>
+      ),
+    },
+  })}
+>
+  <button type="submit">Login</button>
+</Form>
 ```
 
 To summarize:
@@ -320,87 +448,6 @@ To summarize:
 | `group`  | ✓          | ✓             | ✓         |
 | `array`  | ✓          | ✓             | ✓         |
 | `hidden` | ✗          | ✓             | ✓         |
-
-## Setting up a form
-
-BlueForm does not expose a single global `<Form />` component.
-
-Instead, forms are created through a **setup step** using `setupForm` to ensure **strong type safety**, especially around `fieldMapping`.
-
-### Why?
-
-`setupForm` does two things:
-
-1. It **binds a field mapping** to a form instance
-2. It returns a **typed `Form` component** and a **typed `defineConfig` helper**
-
-```ts
-const [Form, defineConfig] = setupForm({
-  fieldMapping,
-  renderRoot,
-  i18nConfig,
-})
-```
-
-This setup step establishes a contract:
-
-- which field types are available
-- how those fields are rendered
-- which configuration shape is valid
-
-Once this contract is defined, it applies consistently to all forms created from it.
-
-### `fieldMapping` is part of the type system
-
-`fieldMapping` is not just a runtime object—it directly influences the **TypeScript types** of your form configuration.
-
-```ts
-const [Form, defineConfig] = setupForm({
-  fieldMapping: defineFieldMapping({
-    text: TextField,
-    select: SelectField,
-  }),
-})
-```
-
-From this point on:
-
-- only `text` and `select` are valid field types
-- invalid field types are caught at compile time
-- field-specific props are type-checked
-
-```ts
-defineConfig({
-  username: {
-    type: "text", // ✅ valid
-  },
-  role: {
-    type: "checkbox", // ❌ type error
-  },
-})
-```
-
-### The `Form` is typed
-
-The `Form` component returned by `setupForm` is **generic over your form model**:
-
-```tsx
-<Form<LoginForm>
-  config={defineConfig({
-    username: { type: "text" },
-    password: { type: "text" },
-  })}
-  onSubmit={(data) => {
-    // data is strongly typed as LoginForm
-  }}
-/>
-```
-
-This gives you:
-
-- fully typed `onSubmit` data
-- typed access to form methods
-- compile-time guarantees that your configuration matches your data model
 
 ## Field authoring
 
