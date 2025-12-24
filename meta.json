@@ -11,8 +11,8 @@
         "Core",
         "Builtin types"
       ],
-      "locStart": 30,
-      "locEnd": 71,
+      "locStart": 31,
+      "locEnd": 72,
       "filePath": "src/lib/__stories__/examples/basic/array-field.stories.tsx",
       "namedExport": "ArrayFields",
       "meta": {}
@@ -127,8 +127,8 @@
       "levels": [
         "Mixed"
       ],
-      "locStart": 56,
-      "locEnd": 88,
+      "locStart": 57,
+      "locEnd": 89,
       "filePath": "src/lib/__stories__/examples/mixed/derived.stories.tsx",
       "namedExport": "DerivedFields",
       "meta": {}
@@ -138,8 +138,8 @@
       "levels": [
         "Mixed"
       ],
-      "locStart": 91,
-      "locEnd": 141,
+      "locStart": 92,
+      "locEnd": 142,
       "filePath": "src/lib/__stories__/examples/mixed/mixed-layout.stories.tsx",
       "namedExport": "MixedLayoutForm",
       "meta": {}
@@ -193,8 +193,8 @@
       "levels": [
         "Plugins"
       ],
-      "locStart": 24,
-      "locEnd": 135,
+      "locStart": 25,
+      "locEnd": 136,
       "filePath": "src/lib/__stories__/examples/plugins/Devtool.stories.tsx",
       "namedExport": "DevTool",
       "meta": {}
@@ -215,8 +215,8 @@
       "levels": [
         "With ui libraries"
       ],
-      "locStart": 26,
-      "locEnd": 132,
+      "locStart": 27,
+      "locEnd": 133,
       "filePath": "src/lib/__stories__/examples/with-ui-libraries/Mantine.stories.tsx",
       "namedExport": "Mantine",
       "meta": {}
@@ -226,8 +226,8 @@
       "levels": [
         "With ui libraries"
       ],
-      "locStart": 25,
-      "locEnd": 155,
+      "locStart": 26,
+      "locEnd": 156,
       "filePath": "src/lib/__stories__/examples/with-ui-libraries/tailwind.stories.tsx",
       "namedExport": "Tailwind",
       "meta": {}
