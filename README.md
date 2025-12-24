@@ -190,25 +190,24 @@ defineConfig({
 })
 ```
 
-The `Form` component returned by `setupForm` is **generic over your form model**:
+The `Form` component returned by `setupForm` is **generic over your form model**. This means `defineConfig` is only needed when introducing a nested typing boundary (for example, `group`, `array`, or custom field configs). For flat keys, the form model type is inferred directly from `Form<TModel>`.
 
 ```tsx
 <Form<LoginForm>
+  // no need to `defineConfig`, types flow down from the Form
   config={{
-    username: { type: "text" },
-    password: { type: "text" },
+    username: {
+      // ...
+    },
+    password: {
+      // ...
+    },
   }}
   onSubmit={(data) => {
     // data is strongly typed as LoginForm
   }}
 />
 ```
-
-This gives you:
-
-- fully typed `onSubmit` data
-- typed access to form methods
-- compile-time guarantees that your configuration matches your data model
 
 ### More examples
 
@@ -222,9 +221,9 @@ Form configuration keys are type-checked against your form model.
 
 For nested fields, BlueForm supports **two equivalent authoring styles**:
 
-**Option A: Using `group` builtin type**
+**Option A: Using builtin type**
 
-Useful when you need group layout.
+For object.
 
 ```ts
 type User = {
@@ -241,6 +240,29 @@ type User = {
       config: defineConfig<User["profile"]>({
         name: { type: "text" },
         email: { type: "text" },
+      }),
+    },
+  },
+}
+```
+
+For array
+
+```tsx
+type User = {
+  addresses: {
+    street: string
+    city: string
+  }[]
+}
+
+{
+  addresses: {
+    type: "array",
+    props: {
+      config: defineConfig<User["addresses"][number]>({
+        street: { type: "text" },
+        city: { type: "text" },
       }),
     },
   },
@@ -267,6 +289,8 @@ Flat keys are validated using React Hook Form’s `Path<T>` type, so invalid pat
 ```ts
 "profile.age" // ❌ Type error – not part of User
 ```
+
+Flat keys work with object paths only; as array paths containing indices are resolved dynamically at runtime.
 
 ### Field props
 
@@ -355,21 +379,14 @@ Use `inline` when:
 
 ### `ui`
 
-UI fields are **render-only nodes**.
+UI fields are **render-only nodes**. It should meant to be for purely for layout or visual structure, and should be named as a virtual field.
 
 ```ts
-notice: {
+__notice: {
   type: "ui",
   render: () => <Divider />,
 }
 ```
-
-UI fields:
-
-- should not participate in form state
-- should not affect validation or submission
-
-`ui` is helpful for purely for layout or visual structure.
 
 ### `group`
 
